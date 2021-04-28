@@ -7,7 +7,7 @@ from .song import Song
 
 try:
     import PySide2
-except ImportError
+except ImportError:
     HAS_PYSIDE2 = False
 
 
@@ -16,6 +16,7 @@ class PlaylistState(enum.Enum):
     playing = enum.auto()
     paused = enum.auto()
     error = enum.auto()
+
 
 class PlaylistMode(enum.Enum):
     loop_single = enum.auto()
@@ -48,6 +49,7 @@ class Playlist:
         self.queue = []
         self.state = PlaylistState.stopped
         self.mode = PlaylistMode.sequential
+        self.play_mode = PlaylistMode.one_time
 
         self.queue_position = None
         self.current_song = None
@@ -80,7 +82,7 @@ class Playlist:
         self.mode = PlaylistMode.random
 
     def set_sequential(self):
-        self.queue = list(range0, len(self.songs))
+        self.queue = list(range(0, len(self.songs)))
         self.mode = PlaylistMode.sequential
 
 
@@ -94,8 +96,15 @@ class Playlist:
     def current(self) -> Song:
         return self.current_song
 
+    @current.setter
+    def current(self, new_song):
+        if self.current_song is not None:
+            self.current_song.free_stream()
+        self.current_song = new_song
+        return self.current_song
+
     @property
-    def upcoming(self) -> :
+    def upcoming(self) -> Song:
         song_id = self.queue[self.queue_position + 1]
         return self.songs[song_id]
 
@@ -103,15 +112,26 @@ class Playlist:
     def prior(self):
         queue_pos = self.queue_position - 1
         if queue_pos < 0:
-            queue_pos = len(self.songs)
+            queue_pos = len(self.songs) - 1
 
         song_pos = self.queue[queue_pos]
+        self.queue_position = queue_pos
 
         return self.songs[song_pos]
 
     def play(self):
-        current = self.current
-        current.play()
+
+        if self.current is None:
+            if len(self.queue) == 0:
+                if self.mode == PlaylistMode.sequential:
+                    self.set_sequential()
+                else:
+                    self.set_randomize()
+
+            self.queue_position = 0
+            current_id = self.queue[self.queue_position]
+            self.current_song = self.songs[current_id]
+        self.current.play()
 
 
     def stop(self):
@@ -130,7 +150,8 @@ class Playlist:
 
         self.current.stop()
         self.current.free_stream()
-        self.current = self.upcoming_song
+        self.current = self.upcoming
+        self.queue_position += 1
         if self.current is not None:
             self.current.play()
 
@@ -139,7 +160,7 @@ class Playlist:
         prior = self.prior
         self.current.stop()
         self.current_song.free_stream()
-        self.current_song = self.upcoming_song
+        self.current_song = prior
         self.current_song.play()
 
 
@@ -157,6 +178,20 @@ class Playlist:
             next_song = self.upcoming_song
             if next_song is not None:
                 next_song.play()
+
+        elif remaining <= 0:
+            self.current.stop()
+            self.current.free_stream()
+            self.next()
+            self.current.play()
+
+    def items(self):
+        for song_id, song in self.songs:
+            yield song_id, song
+
+    def __len__(self):
+        return len(self.songs)
+
 
 
 
