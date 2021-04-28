@@ -14,7 +14,7 @@ BASSVERSION = 0x204
 BASSVERSIONTEXT = '2.4'
 
 HERE = Path(__file__).parent
-BASS_DLL = HERE / "bass"
+BASS_DLL = HERE / "vendor" / "bass"
 
 # Carry over from pybass, TODO remove?
 if sys.hexversion < 0x02060000:

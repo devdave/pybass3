@@ -7,7 +7,7 @@ import pathlib
 from datatypes import HANDLE
 
 HERE = pathlib.Path(__file__).parent
-TAG_FILE = HERE / "tags"
+TAG_FILE = HERE / "vendor" / "tags"
 
 
 if platform.system().lower() == "windows":
