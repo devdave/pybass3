@@ -38,6 +38,8 @@ class Song:
             if retval is not True:
                 Bass.RaiseError()
 
+        self._handle = None
+
     @property
     def position(self):
         return BassChannel.GetPositionSeconds(self.handle)
