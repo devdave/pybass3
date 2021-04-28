@@ -8,6 +8,7 @@ for non-commercial development but requires a license for paid/commercial work. 
 
 #BASS library documentation
 
+http://www.un4seen.com/doc/
 
 # Purpose and notes
 
