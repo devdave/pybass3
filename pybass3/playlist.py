@@ -28,9 +28,17 @@ class Playlist:
 
     VALID_TYPES = ["mp3", "mp4", "ogg", "opus"]
 
-    songs:list
-    queue: list
-    state: PlaylistState
+    songs:list # The songs the playlist knows about
+    queue: list # The order songs will be played in
+    state: PlaylistState # Is the playlist playing songs, stopped, or paused?
+    mode: PlaylistMode # Is the playlist running sequential or random
+    play_mode: PlaylistMode # is the playlist looping the whole queue, just a song, or running to end?
+
+    queue_position: int  # Where is the playlist in the current queue
+    current_song: Song # What is currently playing
+    fadein_song: Song # if fade_in is not None, this is the next song to play
+    fade_in: int # How soon should the next song start playing, None if lock step
+    song_cls: Song # What is the container for a song (eg Song or QtSong)
 
 
 
