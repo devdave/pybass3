@@ -126,5 +126,20 @@ class BassChannel:
         return BASS_ChannelBytes2Seconds(stream_handle, bytes)
 
     @classmethod
+    def GetLengthStr(cls, stream_handle):
+        value = cls.GetLengthSeconds(stream_handle)
+        seconds = int(value%60)
+        minutes = int(value/60)
+        return f"{minutes:02}:{seconds:02}"
+
+    @classmethod
+    def GetPositionStr(cls, stream_handle):
+        value = cls.GetPositionSeconds(stream_handle)
+        seconds = int(value%60)
+        minutes = int(value/60)
+        return f"{minutes:02}:{seconds:02}"
+
+
+    @classmethod
     def GetLengthBytes(cls, stream_handle: HANDLE):
         return BASS_ChannelGetLength(stream_handle, channel.POS_BYTE)
