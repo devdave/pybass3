@@ -123,6 +123,9 @@ class Song:
         if retval is not True:
             Bass.RaiseError()
 
+    def __hash__(self):
+        return hash(self.file_path)
+
 
 
 if HAS_PYSIDE2:
