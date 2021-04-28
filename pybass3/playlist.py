@@ -1,6 +1,7 @@
 
 import enum
 from pathlib import Path
+import random
 
 from .song import Song
 
@@ -72,8 +73,96 @@ class Playlist:
     def set_fade(self, seconds):
         self.fade_in = seconds
 
-    def randomize(self):
-        ids = range(0, len(self.songs))
+    def set_randomize(self):
+        ids = list(range(0, len(self.songs)))
+        random.shuffle(ids)
+        self.queue = ids
+        self.mode = PlaylistMode.random
+
+    def set_sequential(self):
+        self.queue = list(range0, len(self.songs))
+        self.mode = PlaylistMode.sequential
+
+
+    def loop_song(self):
+        self.play_mode = PlaylistMode.loop_single
+
+    def loop_queue(self):
+        self.play_mode = PlaylistMode.loop_all
+
+    @property
+    def current(self) -> Song:
+        return self.current_song
+
+    @property
+    def upcoming(self) -> :
+        song_id = self.queue[self.queue_position + 1]
+        return self.songs[song_id]
+
+    @property
+    def prior(self):
+        queue_pos = self.queue_position - 1
+        if queue_pos < 0:
+            queue_pos = len(self.songs)
+
+        song_pos = self.queue[queue_pos]
+
+        return self.songs[song_pos]
+
+    def play(self):
+        current = self.current
+        current.play()
+
+
+    def stop(self):
+        self.current.stop()
+
+
+    def pause(self):
+        return self.current.pause()
+
+
+    def restart(self):
+        return self.current.move2position_seconds(0)
+
+
+    def next(self):
+
+        self.current.stop()
+        self.current.free_stream()
+        self.current = self.upcoming_song
+        if self.current is not None:
+            self.current.play()
+
+
+    def previous(self):
+        prior = self.prior
+        self.current.stop()
+        self.current_song.free_stream()
+        self.current_song = self.upcoming_song
+        self.current_song.play()
+
+
+    def tick(self):
+        current_pos = self.current.position_bytes
+        current_duration = self.current.duration_bytes
+        remaining = current_duration - current_pos
+        remaining_seconds = self.current.duration - self.current.position
+
+        if self.play_mode == PlaylistMode.loop_single:
+            if current_pos >= current_duration:
+                self.current.move2position_seconds(0)
+
+        elif self.fade_in is not None and remaining_seconds <= self.fade_in:
+            next_song = self.upcoming_song
+            if next_song is not None:
+                next_song.play()
+
+
+
+
+
+
 
 
 
