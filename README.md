@@ -1,21 +1,24 @@
-PyBASS wrapper
---------------
+# PyBASS wrapper
 
-# LICENSING
+
+LICENSING
+---------
 
 The PyBass PYTHON wrapper is licensed under the MIT license BUT the BASS Library is dual licensed as free to use
 for non-commercial development but requires a license for paid/commercial work.   Please see http://un4seen.com
 
-#BASS library documentation
+BASS library documentation
+---------------------------
 
 http://www.un4seen.com/doc/
 
-# Purpose and notes
+Purpose and notes
+------------------
 
 A simple wrapper around un4seen.com's BASS audio library to enable playing various format media files from python.
 
-
-#Stock python usage
+Stock python usage
+------------------
 
 ```python
 from argparse import ArgumentParser
@@ -44,3 +47,67 @@ if __name__ == "__main__":
     main(args.song_file)
 ```
 
+# Windows playlist example
+
+```python
+import pathlib
+import time
+import argparse
+import msvcrt
+
+from pybass3 import Song
+from pybass3.playlist import Playlist
+
+
+
+
+def kbfunc():
+    x = msvcrt.kbhit()
+    if x:
+       ret = ord(msvcrt.getch())
+    else:
+       ret = 0
+
+    return ret
+
+
+def main(dir_path):
+    dir_path = pathlib.Path(dir_path)
+
+    playlist = Playlist()
+    playlist.add_directory(dir_path, recurse=True)
+
+    playlist.play()
+    play_indefinitely = True
+    while play_indefinitely:
+        try:
+            print(playlist.current.file_path.name, playlist.current_song.position, playlist.current_song.duration)
+            playlist.tick()
+            key = kbfunc()
+            if key:
+                print("User pressed", key)
+                if key == 122: # Z
+                    playlist.previous()
+                elif key == 98: # X
+                    playlist.next()
+                elif key == 120: # C
+                    playlist.play()
+                elif key == 99: # V 
+                    playlist.pause()
+                elif key == 118: # B
+                    playlist.stop()
+            else:
+                time.sleep(1)
+                
+        except KeyboardInterrupt:
+            playlist.free()
+            play_indefinitely = False
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("song_dir")
+    args = parser.parse_args()
+
+    main(args.song_dir)
+```
