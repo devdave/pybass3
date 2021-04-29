@@ -116,6 +116,9 @@ class BassChannel:
         bytes = BASS_ChannelSeconds2Bytes(handle, seconds)
         return BASS_ChannelSetPosition(handle, bytes, channel.POS_BYTE)
 
+    @classmethod
+    def SetPositionByBytes(cls, handle: HANDLE, bytes: int):
+        return BASS_ChannelSetPosition(handle, bytes, channel.POS_BYTE)
 
 
     @classmethod
