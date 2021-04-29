@@ -42,7 +42,6 @@ class BassStream:
 
         if handle == 0:
             Bass.RaiseError(f"{file=}")
-            pass
 
         return handle
 
