@@ -142,7 +142,7 @@ if HAS_PYSIDE2:
 
         timer: QtCore.QTimer
 
-        def __init__(self, file_path, precision: int=250):
+        def __init__(self, file_path, precision: int=500):
             """
 
             :param file_path: A valid file path to a music file
