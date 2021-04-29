@@ -98,9 +98,6 @@ class Playlist:
         self.queue = list(range(0, len(self.songs)))
         self.mode = PlaylistMode.sequential
 
-    def set_fadein(self, seconds):
-        self.fade_in = seconds
-
     def loop_song(self):
         self.play_mode = PlaylistMode.loop_single
 
