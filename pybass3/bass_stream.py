@@ -1,6 +1,6 @@
 import ctypes
 
-from .bass_module import bass_module
+from .bass_module import bass_module, Bass
 from .bass_module import func_type
 from .datatypes import QWORD, HSTREAM, HANDLE
 
@@ -41,7 +41,7 @@ class BassStream:
         handle = BASS_StreamCreateFile(mem, file, offset, length, flags)
 
         if handle == 0:
-            # throw BassError()
+            Bass.RaiseError(f"{file=}")
             pass
 
         return handle
