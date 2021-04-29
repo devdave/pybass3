@@ -70,15 +70,16 @@ class BassError:
 
 
 class BassException(Exception):
-    def __init__(self, code, desc):
+    def __init__(self, code, desc, detail: str = None):
         self.code = code
         self.desc = desc
+        self.detail = detail
 
     def __str__(self):
-        return f"{self.code=}: {self.desc=}"
+        return f"{self.code=}: {self.desc=} - {self.detail=}"
 
     def __repr__(self):
-        return f"{self.code=}: {self.desc=}"
+        return f"{self.code=}: {self.desc=} - {self.detail=}"
 
 class BassMissingDevice(Exception):
     def __init__(self, device_id):
@@ -97,14 +98,15 @@ class Bass:
         return BassError(code, get_description(code))
 
     @classmethod
-    def RaiseError(cls) -> None:
+    def RaiseError(cls, detail = None) -> None:
         """
 
-        :return:
+        Raises:
+            BassException
         """
         error = cls.GetError()
         if error.code != errors.OK:
-            raise BassException(error.code, error.desc)
+            raise BassException(error.code, error.desc, detail)
 
     @classmethod
     def Init(cls, device: int = -1,
