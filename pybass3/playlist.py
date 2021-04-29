@@ -53,8 +53,9 @@ class Playlist:
 
         self.queue_position = None
         self.current_song = None
-        self.upcoming_song = None
+
         self.fade_in = None
+        self.fadein_song = None
         self.song_cls = Song
 
     def add_song(self, song_path):
@@ -85,6 +86,8 @@ class Playlist:
         self.queue = list(range(0, len(self.songs)))
         self.mode = PlaylistMode.sequential
 
+    def set_fadein(self, seconds):
+        self.fade_in = seconds
 
     def loop_song(self):
         self.play_mode = PlaylistMode.loop_single
@@ -121,6 +124,9 @@ class Playlist:
 
     def play(self):
 
+        if self.fadein_song is not None:
+            self.fadein_song.play()
+
         if self.current is None:
             if len(self.queue) == 0:
                 if self.mode == PlaylistMode.sequential:
@@ -135,33 +141,56 @@ class Playlist:
 
 
     def stop(self):
+        if self.fadein_song is not None:
+            self.fadein_song.stop()
+
         self.current.stop()
 
 
     def pause(self):
+        if self.fadein_song is not None:
+            self.fadein_song.pause()
+
         return self.current.pause()
 
 
     def restart(self):
+        if self.fadein_song is not None:
+            self.fadein_song.stop()
+            self.fadein_song.free_stream()
+            self.fadein_song = None
+
         return self.current.move2position_seconds(0)
 
 
     def next(self):
 
-        self.current.stop()
-        self.current.free_stream()
-        self.current = self.upcoming
-        self.queue_position += 1
-        if self.current is not None:
-            self.current.play()
+        if self.fadein_song is not None:
+            self.current.stop()
+            self.current = self.fadein_song
+            self.fadein_song = None
+            self.queue_position += 1
+        else:
+            self.current.stop()
+            self.current.free_stream()
+            self.current = self.upcoming
+            self.queue_position += 1
+            if self.current is not None:
+                self.current.play()
 
 
     def previous(self):
         prior = self.prior
-        self.current.stop()
-        self.current_song.free_stream()
-        self.current_song = prior
-        self.current_song.play()
+        if self.fadein_song is not None:
+            self.fadein_song.stop()
+            self.current.move2position_seconds(0)
+            self.current.play()
+            self.fadein_song = None
+        else:
+            self.current.stop()
+            self.current_song.free_stream()
+            self.current_song = prior
+            self.current_song.play()
 
 
     def tick(self):
@@ -175,9 +204,16 @@ class Playlist:
                 self.current.move2position_seconds(0)
 
         elif self.fade_in is not None and remaining_seconds <= self.fade_in:
-            next_song = self.upcoming_song
-            if next_song is not None:
-                next_song.play()
+            if self.fadein_song is not None:
+                if remaining <= 0:
+                    self.current.stop()
+                    self.current.free_stream()
+                    self.current = self.fadein_song
+                    self.fadein_song = None
+                    self.queue_position += 1
+            elif self.upcoming is not None:
+                self.fadein_song = self.upcoming
+                self.fadein_song.play()
 
         elif remaining <= 0:
             self.current.stop()
