@@ -24,10 +24,10 @@ setup(
 
 
     ],
-    packages=find_packages("pybass3"),
-    package_dir={"": "pybass3"},
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     package_data={
-        "": ["vendor/*.dll", "vendor/*.h", "vendor/*.txt"],
+        "pybass3": ["vendor/*.dll", "vendor/*.h", "vendor/*.txt"],
     },
     python_requires = ">= 3.6"
 

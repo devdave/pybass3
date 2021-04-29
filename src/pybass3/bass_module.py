@@ -8,7 +8,6 @@ from .codes import errors
 from .codes import config
 from .codes.errors import get_description
 from .structs.info import BASS_INFO, BASS_DEVICEINFO
-from .datatypes import QWORD, HANDLE
 
 BASSVERSION = 0x204
 BASSVERSIONTEXT = '2.4'
