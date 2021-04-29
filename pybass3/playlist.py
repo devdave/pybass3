@@ -62,6 +62,7 @@ class Playlist:
     def add_song(self, song_path):
         song = self.song_cls(song_path)
         self.songs.append(song)
+        return len(self.songs), song
 
     def add_directory(self, dir_path: Path, recurse=True):
         files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix)
