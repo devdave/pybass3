@@ -4,13 +4,16 @@ __pycache__
 *.komodoproject
 docs/
 dist/
+env/
+build/
+
 MANIFEST
 htmlcov
 .coverage
-env/
-txweb.egg-info/*
+
 .cache/v/cache/lastfailed
 log.txt
+
 
 bin
 develop-eggs
