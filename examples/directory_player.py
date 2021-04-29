@@ -26,23 +26,28 @@ def main(dir_path):
     playlist.add_directory(dir_path, recurse=True)
 
     playlist.play()
+    playlist.fade_in = 5
     play_indefinitely = True
     while play_indefinitely:
         try:
-            print(playlist.current.file_path.name, playlist.current_song.position, playlist.current_song.duration)
+            print(playlist.current.file_path.name, int(playlist.current_song.position), int(playlist.current_song.duration))
             playlist.tick()
             key = kbfunc()
             if key:
-                print("User pressed", key)
                 if key == 122:
+                    print("Previous")
                     playlist.previous()
                 elif key == 98:
+                    print("Next")
                     playlist.next()
                 elif key == 120:
+                    print("Play")
                     playlist.play()
                 elif key == 99:
+                    print("Pause")
                     playlist.pause()
                 elif key == 118:
+                    print("Stop")
                     playlist.stop()
 
             time.sleep(1)
