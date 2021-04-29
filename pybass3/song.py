@@ -26,8 +26,8 @@ class Song:
         assert self.file_path.exists() and self.file_path.is_file(), f"{self.file_path} doesn't exist or is not a file"
 
         self._handle = None
-        self._handle_length = None
-        self._handle_position = None
+        self._handle_length = None # Length in seconds
+        self._handle_position = 0 # Current position in the song, in seconds
 
     def __del__(self):
         self.free_stream()
@@ -43,6 +43,7 @@ class Song:
     @property
     def position(self):
         return BassChannel.GetPositionSeconds(self.handle)
+
 
     @property
     def position_bytes(self):
