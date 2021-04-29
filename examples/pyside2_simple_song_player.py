@@ -8,6 +8,7 @@ from PySide2 import QtWidgets
 from pybass3.song import QtSong
 from pybass3.codes import errors
 from pybass3 import Bass
+from pybass3.bass_module import BassException
 
 
 
@@ -129,8 +130,13 @@ class Simple(QtWidgets.QWidget):
 
     def on_play_clicked(self):
         print("Play clicked")
-        self.length.setText(repr(self.song.duration))
-        self.song.play()
+        try:
+            self.length.setText(repr(self.song.duration))
+            self.song.play()
+        except BassException as bexc:
+            box = QtWidgets.QMessageBox()
+            box.setText(f"Unable to play file {self.song.file_path} - Error is {bexc.desc}")
+            box.exec_()
 
     def on_stop_clicked(self):
         print("Stop clicked")
@@ -150,16 +156,22 @@ class Simple(QtWidgets.QWidget):
             files = fileDialog.selectedFiles()
             file = files[0]
             if self.song is not None:
-                self.song.stop()
                 del self.song
 
             self.song = QtSong(file)
-            assert self.song.handle is not None
-            self.song.position_updated.connect(self.on_song_position_updated)
-            self.position_slide.setRange(0, self.song.duration)
-            self.song.play()
-            seconds = self.song.duration
-            self.length.setText(str(seconds))
+            # Assure the song loads correctly
+            try:
+                self.song.handle is not None
+            except BassException as bexc:
+                box = QtWidgets.QMessageBox()
+                box.setText(f"Unable to load {file=} because {bexc.desc}")
+                box.exec_()
+            else:
+                self.song.position_updated.connect(self.on_song_position_updated)
+                self.position_slide.setRange(0, self.song.duration)
+                self.song.play()
+                seconds = self.song.duration
+                self.length.setText(str(seconds))
 
     def on_position_slider_mousdown(self):
         self.slide_mousedown = True
