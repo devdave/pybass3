@@ -57,7 +57,8 @@ class Playlist:
 
         self.fade_in = None
         self.fadein_song = None
-        self.song_cls = Song
+        self.song_cls = song_cls
+
 
     def add_song(self, song_path):
         song = self.song_cls(song_path)
