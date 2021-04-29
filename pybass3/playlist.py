@@ -59,6 +59,18 @@ class Playlist:
         self.fadein_song = None
         self.song_cls = song_cls
 
+    @property
+    def song_id(self):
+        if self.queue_position is None:
+            if self.mode == PlaylistMode.sequential:
+                self.set_sequential()
+            else:
+                self.set_randomize()
+
+            if self.queue_position is None:
+                self.queue_position = 0
+
+        return self.queue[self.queue_position]
 
     def add_song(self, song_path):
         song = self.song_cls(song_path)
