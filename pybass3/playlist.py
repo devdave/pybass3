@@ -7,6 +7,7 @@ from .song import Song
 
 try:
     import PySide2
+    HAS_PYSIDE2 = True
 except ImportError:
     HAS_PYSIDE2 = False
 
