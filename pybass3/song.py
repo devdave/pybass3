@@ -34,6 +34,10 @@ class Song:
 
     def free_stream(self):
         if self._handle is not None:
+
+            if self.is_playing or self.is_paused:
+                self.stop()
+
             retval = BassStream.Free(self._handle)
             if retval is not True:
                 Bass.RaiseError()
