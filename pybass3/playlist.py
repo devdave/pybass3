@@ -73,8 +73,17 @@ class Playlist:
             for fdir in dirs:
                 self.add_directory(fdir, recurse)
 
-    def set_fade(self, seconds):
-        self.fade_in = seconds
+    @property
+    def fade(self):
+        return self.fade_in
+
+    @fade.setter
+    def fade(self, value):
+        self.fade_in = value
+
+    @fade.deleter
+    def fade(self):
+        self.fade_in = None
 
     def set_randomize(self):
         ids = list(range(0, len(self.songs)))

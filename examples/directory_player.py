@@ -26,7 +26,7 @@ def main(dir_path):
     playlist.add_directory(dir_path, recurse=True)
 
     playlist.play()
-    playlist.fade_in = 5
+    playlist.fade = 5
     play_indefinitely = True
     while play_indefinitely:
         try:
