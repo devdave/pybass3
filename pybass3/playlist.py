@@ -229,6 +229,26 @@ class Playlist:
         return len(self.songs)
 
 
+if HAS_PYSIDE2:
+    from PySide2 import QtCore
+    from PySide2 import QtWidgets
+    Qt = QtCore.Qt
+
+    class QtPlaylist(Playlist):
+
+        song_added = QtCore.Signal(int, Song)
+        song_changed = QtCore.Signal(int, Song)  # Song ID and Song object
+        music_paused = QtCore.Signal()
+        music_playing = QtCore.Signal()
+
+        timer: QtCore.QTimer
+
+
+        def add_song(self, song_path):
+            index, song = super(QtPlaylist, self).add_song(song_path)
+
+            self.song_added.emit(index, song)
+
 
 
 
