@@ -114,6 +114,13 @@ class Playlist:
         self.current_song = new_song
         return self.current_song
 
+    @current.deleter
+    def current(self):
+        if self.current_song is not None:
+            self.current_song.free_stream()
+
+
+
     @property
     def upcoming(self) -> Song:
         song_id = self.queue[self.queue_position + 1]
