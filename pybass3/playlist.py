@@ -29,7 +29,7 @@ class PlaylistMode(enum.Enum):
 
 class Playlist:
 
-    VALID_TYPES = ["mp3", "mp4", "ogg", "opus"]
+    VALID_TYPES = [".mp3", ".mp4", ".ogg", ".opus"]
 
     songs:list # The songs the playlist knows about
     queue: list # The order songs will be played in
