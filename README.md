@@ -84,17 +84,21 @@ def main(dir_path):
             print(playlist.current.file_path.name, playlist.current_song.position, playlist.current_song.duration)
             playlist.tick()
             key = kbfunc()
-            if key:
-                print("User pressed", key)
+            if key:                
                 if key == 122: # Z
+                    print("Previous")
                     playlist.previous()
-                elif key == 98: # X
+                elif key == 98: # B                    
+                    print("Next")
                     playlist.next()
-                elif key == 120: # C
+                elif key == 120: # X
+                    print("Play")
                     playlist.play()
-                elif key == 99: # V 
+                elif key == 99: # c
+                    print("Pause")    
                     playlist.pause()
-                elif key == 118: # B
+                elif key == 118: # v
+                    print("Stop")
                     playlist.stop()
             else:
                 time.sleep(1)
