@@ -142,7 +142,7 @@ class Simple(QtWidgets.QWidget):
 
     def on_load_song_clicked(self):
         fileDialog = QtWidgets.QFileDialog(self)
-        supportedMimeTypes = ['audio/mpeg', 'application/ogg', 'application/octet-stream']
+        supportedMimeTypes = ['audio/mpeg', 'application/ogg', 'audio/ogg', 'application/octet-stream']
         fileDialog.setMimeTypeFilters(supportedMimeTypes)
         # fileDialog.setFileMode(fileDialog.Directory & fileDialog.ExistingFile)
         fileDialog.setDirectory(self.song.file_path.parent.as_posix())
