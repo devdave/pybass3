@@ -123,17 +123,22 @@ class Playlist:
 
     @property
     def upcoming(self) -> Song:
+        qpos = self.queue_position + 1
+        # Is the next song past the queue's length?
+        if qpos >= len(self.queue):
+            qpos = 0
+
         song_id = self.queue[self.queue_position + 1]
+
         return self.songs[song_id]
 
     @property
     def prior(self):
-        queue_pos = self.queue_position - 1
-        if queue_pos < 0:
+        qpos = self.queue_position - 1
+        if qpos < 0:
             queue_pos = len(self.songs) - 1
 
-        song_pos = self.queue[queue_pos]
-        self.queue_position = queue_pos
+        song_pos = self.queue[qpos]
 
         return self.songs[song_pos]
 
@@ -171,7 +176,6 @@ class Playlist:
 
     def restart(self):
         if self.fadein_song is not None:
-            self.fadein_song.stop()
             self.fadein_song.free_stream()
             self.fadein_song = None
 
@@ -186,7 +190,6 @@ class Playlist:
             self.fadein_song = None
             self.queue_position += 1
         else:
-            self.current.stop()
             self.current.free_stream()
             self.current = self.upcoming
             self.queue_position += 1
@@ -247,7 +250,10 @@ class Playlist:
 if HAS_PYSIDE2:
     from PySide2 import QtCore
     from PySide2 import QtWidgets
+
     Qt = QtCore.Qt
+
+    from .song import QtSong
 
     class QtPlaylist(Playlist):
 
@@ -255,14 +261,33 @@ if HAS_PYSIDE2:
         song_changed = QtCore.Signal(int, Song)  # Song ID and Song object
         music_paused = QtCore.Signal()
         music_playing = QtCore.Signal()
+        music_stopped = QtCore.Signal()
 
         timer: QtCore.QTimer
+
+        def __init__(self):
+            super(QtPlaylist, self).__init__(QtSong)
 
 
         def add_song(self, song_path):
             index, song = super(QtPlaylist, self).add_song(song_path)
 
             self.song_added.emit(index, song)
+
+        def play(self):
+            super(QtPlaylist, self).play()
+            if self.current.is_playing:
+                self.music_playing.emit()
+
+        def stop(self):
+            super(QtPlaylist, self).stop()
+            if self.current.is_stopped:
+                self.music_stopped.emit()
+
+        def pause(self):
+            super(QtPlaylist, self).pause()
+            if self.current.is_paused:
+                self.music_paused.emit()
 
 
 
