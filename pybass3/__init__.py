@@ -1,7 +1,7 @@
 
-__ALL__ = ["Song", "Bass", "BassChannel", "BassStream"]
+__ALL__ = ["Song", "Bass", "BassException", "BassChannel", "BassStream"]
 
 from .song import Song
-from .bass_module import Bass
+from .bass_module import Bass, BassException
 from .bass_channel import BassChannel
 from .bass_stream import BassStream
