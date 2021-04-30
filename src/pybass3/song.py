@@ -39,6 +39,10 @@ class Song:
     def id(self):
         return self._id
 
+    def _create_stream(self):
+        self._handle = BassStream.CreateFile(False, bytes(self.file_path))
+        self._handle_length = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
+
     def free_stream(self) -> None:
         """
             Stop this music file from playing and frees its file handle from the BASS library.
@@ -93,9 +97,7 @@ class Song:
 
         return self._handle
 
-    def _create_stream(self):
-        self._handle = BassStream.CreateFile(False, bytes(self.file_path))
-        self._handle_length = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
+
 
     @handle.deleter
     def handle(self):
