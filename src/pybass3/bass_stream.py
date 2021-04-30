@@ -41,7 +41,7 @@ class BassStream:
         handle = BASS_StreamCreateFile(mem, file, offset, length, flags)
 
         if handle == 0:
-            Bass.RaiseError(f"{file=}")
+            Bass.RaiseError(f"file={file!r}")
 
         return handle
 
