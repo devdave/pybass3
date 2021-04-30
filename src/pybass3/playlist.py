@@ -29,7 +29,7 @@ class Playlist:
 
     VALID_TYPES = [".mp3", ".mp4", ".ogg", ".opus"]
 
-    songs:list # The songs the playlist knows about
+    songs: dict # The songs the playlist knows about
     queue: list # The order songs will be played in
     state: PlaylistState # Is the playlist playing songs, stopped, or paused?
     mode: PlaylistMode # Is the playlist running sequential or random
@@ -44,7 +44,7 @@ class Playlist:
 
 
     def __init__(self, song_cls = Song):
-        self.songs = []
+        self.songs = {}
         self.queue = []
         self.state = PlaylistState.stopped
         self.mode = PlaylistMode.sequential
@@ -79,6 +79,9 @@ class Playlist:
         self.songs.append(song)
         self.queue.append(len(self.songs)-1)
         return len(self.songs)-1, song
+            self.songs[song.id] = song
+            self.queue.append(song.id)
+            return song.id, song
 
     def add_directory(self, dir_path: Path, recurse=True):
         files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix in self.VALID_TYPES)
@@ -104,13 +107,13 @@ class Playlist:
         self.fade_in = None
 
     def set_randomize(self):
-        ids = list(range(0, len(self.songs)))
+        ids = list(self.songs.keys())
         random.shuffle(ids)
         self.queue = ids
         self.mode = PlaylistMode.random
 
     def set_sequential(self):
-        self.queue = list(range(0, len(self.songs)))
+        self.queue = list(self.songs.keys())
         self.mode = PlaylistMode.sequential
 
     def loop_song(self):
@@ -155,15 +158,14 @@ class Playlist:
     def prior(self):
         qpos = self.queue_position - 1
         if qpos < 0:
-            qpos = len(self.songs) - 1
             if self.mode == PlaylistMode.loop_all:
                 qpos = len(self.songs) - 1
             else:
                 return None
 
-        song_pos = self.queue[qpos]
+        song_id = self.queue[qpos]
 
-        return self.songs[song_pos]
+        return self.songs[song_id]
 
     def song_playing(self, song: Song):
         """
@@ -307,7 +309,8 @@ class Playlist:
             self.current.play()
 
     def items(self):
-        for song_id, song in enumerate(self.songs):
+        # TODO yield from instead?
+        for song_id, song in self.songs.items():
             yield song_id, song
 
     def __len__(self):
