@@ -83,11 +83,11 @@ class Song:
 
     @property
     def remaining_seconds(self):
-        return self.position - self.duration
+        return self.duration - self.position
 
     @property
     def remaining_bytes(self):
-        return self.position_bytes - self.duration_bytes
+        return self.duration_bytes - self.position_bytes
 
 
     @property
