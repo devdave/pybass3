@@ -143,6 +143,10 @@ class Playlist:
         # Is the next song past the queue's length?
         if qpos >= len(self.queue):
             qpos = 0
+            if self.mode == PlaylistMode.loop_all:
+                qpos = 0
+            else:
+                return None
 
         song_id = self.queue[self.queue_position + 1]
 
@@ -153,6 +157,10 @@ class Playlist:
         qpos = self.queue_position - 1
         if qpos < 0:
             qpos = len(self.songs) - 1
+            if self.mode == PlaylistMode.loop_all:
+                qpos = len(self.songs) - 1
+            else:
+                return None
 
         song_pos = self.queue[qpos]
 
