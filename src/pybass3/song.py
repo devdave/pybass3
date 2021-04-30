@@ -74,6 +74,10 @@ class Song:
     def remaining_seconds(self):
         return self.position - self.duration
 
+    @property
+    def remaining_bytes(self):
+        return self.position_bytes - self.duration_bytes
+
 
     @property
     def handle(self) -> HANDLE:
