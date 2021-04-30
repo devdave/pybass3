@@ -7,7 +7,7 @@ from .bass_channel import BassChannel
 
 
 class Pys2Song(QtCore.QObject, Song):
-    position_updated = QtCore.Signal(int)
+    position_updated = QtCore.Signal(int) # length in bytes
     song_finished = QtCore.Signal()
 
     timer: QtCore.QTimer
