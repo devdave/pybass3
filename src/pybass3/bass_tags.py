@@ -1,5 +1,3 @@
-
-import sys
 import ctypes
 import platform
 import pathlib
@@ -28,7 +26,7 @@ class BassTags:
 
     @classmethod
     def GetTags(cls, handle: HANDLE, format: str):
-        retval = TAGS_Read(handle, format)
+        return TAGS_Read(handle, format)
 
     @classmethod
     def GetDefaultTags(cls, handle):

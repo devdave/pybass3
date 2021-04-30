@@ -158,7 +158,7 @@ class Playlist:
     def prior(self):
         qpos = self.queue_position - 1
         if qpos < 0:
-            queue_pos = len(self.songs) - 1
+            qpos = len(self.songs) - 1
 
         song_pos = self.queue[qpos]
 
@@ -207,7 +207,7 @@ class Playlist:
     def next(self):
         try:
             return self._next()
-        except BassException as bexc:
+        except BassException:
             if self.error_mode == PlaylistMode.progress_on_error:
                 self.queue_position += 1
                 if self.queue_position > len(self.queue):
@@ -306,7 +306,7 @@ class Playlist:
 
 if HAS_PYSIDE2:
     from PySide2 import QtCore
-    from PySide2 import QtWidgets
+
 
     Qt = QtCore.Qt
 

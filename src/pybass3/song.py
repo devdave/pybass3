@@ -19,7 +19,7 @@ class Song:
     _handle_length: float
     _handle_position: float
 
-    def __init__(self, file_path):
+    def __init__(self, file_path: T.Union[str, Path]):
         super(Song, self).__init__()
         Bass.Init()
         self.file_path = Path(file_path)
@@ -30,9 +30,20 @@ class Song:
         self._handle_position = 0 # Current position in the song, in seconds
 
     def __del__(self):
+        """
+            Ensure that the BASS library file handle is freed.
+
+        :return:
+        """
         self.free_stream()
 
-    def free_stream(self):
+    def free_stream(self) -> None:
+        """
+            Stop this music file from playing and frees its file handle from the BASS library.
+
+            :raises
+            BassException - If there is an issue releasing the file handle (eg it never existed).
+        """
         if self._handle is not None:
 
             if self.is_playing or self.is_paused:
@@ -45,27 +56,27 @@ class Song:
         self._handle = None
 
     @property
-    def position(self):
+    def position(self) -> float:
         return BassChannel.GetPositionSeconds(self.handle)
 
 
     @property
-    def position_bytes(self):
+    def position_bytes(self) -> int:
         return BassChannel.GetPositionBytes(self.handle)
 
     @property
-    def duration(self):
+    def duration(self) -> float:
         if self._handle is None:
             self._create_stream()
 
         return self._handle_length
 
     @property
-    def duration_bytes(self):
+    def duration_bytes(self) -> int:
         return BassChannel.GetLengthBytes(self.handle)
 
     @property
-    def handle(self):
+    def handle(self) -> HANDLE:
         if self._handle is None:
             self._create_stream()
 
@@ -80,7 +91,7 @@ class Song:
         self.free_stream()
 
     def __len__(self):
-        length = BassChannel.GetLengthBytes(self.handle)
+        return BassChannel.GetLengthBytes(self.handle)
 
     @property
     def is_playing(self):
@@ -109,6 +120,8 @@ class Song:
         :return:
         """
         retval = BassChannel.SetPositionByBytes(self.handle, bytes)
+        if retval is not True:
+            Bass.RaiseError()
 
     def play(self):
         retval = BassChannel.Play(self.handle, False)

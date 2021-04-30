@@ -62,7 +62,7 @@ class Simple(QtWidgets.QWidget):
     def configureTable(self):
         columns = ["Name", "Value"]
         self.table.setHorizontalHeaderLabels(columns)
-        row_id = 0
+
 
         lib_info = Bass.GetLibInfo()
 
