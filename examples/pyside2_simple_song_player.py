@@ -5,7 +5,7 @@ from pathlib import Path
 from PySide2 import QtCore
 from PySide2 import QtWidgets
 
-from pybass3.song import QtSong
+from pybass3.pys2_song import Pys2Song
 from pybass3.codes import errors
 from pybass3 import Bass
 from pybass3.bass_module import BassException
@@ -22,7 +22,7 @@ class Simple(QtWidgets.QWidget):
     def __init__(self, song_file):
         super(Simple, self).__init__()
         self.song_file = song_file
-        self.song = QtSong(song_file)
+        self.song = Pys2Song(song_file)
 
         self.slide_mousedown = False
 

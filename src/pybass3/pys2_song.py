@@ -1,4 +1,4 @@
-from Pyside2 import QtCore
+from PySide2 import QtCore
 
 from .song import Song
 from .bass_module import Bass
@@ -45,9 +45,8 @@ class Pys2Song(QtCore.QObject, Song):
         self.free_stream()
 
     def play(self):
-        super(QtSong, self).play()
-        self.timer.start()
+        super(Pys2Song, self).play()
 
     def stop(self):
-        super(QtSong, self).stop()
+        super(Pys2Song, self).stop()
         self.timer.stop()
