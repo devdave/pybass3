@@ -1,5 +1,6 @@
 from pathlib import Path
 import typing as T
+from uuid import uuid4
 
 
 from .datatypes import HANDLE
@@ -17,6 +18,8 @@ class Song:
     def __init__(self, file_path: T.Union[str, Path]):
         super(Song, self).__init__()
         Bass.Init()
+
+        self._id = uuid4().hex
         self.file_path = Path(file_path)
         assert self.file_path.exists() and self.file_path.is_file(), f"{self.file_path} doesn't exist or is not a file"
 
@@ -31,6 +34,10 @@ class Song:
         :return:
         """
         self.free_stream()
+
+    @property
+    def id(self):
+        return self._id
 
     def free_stream(self) -> None:
         """
