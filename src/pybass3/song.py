@@ -1,11 +1,6 @@
 from pathlib import Path
 import typing as T
 
-try:
-    from PySide2 import QtCore
-    HAS_PYSIDE2 = True
-except ImportError:
-    HAS_PYSIDE2 = False
 
 from .datatypes import HANDLE
 from .bass_module import Bass
@@ -16,8 +11,8 @@ from .bass_stream import BassStream
 class Song:
 
     _handle: HANDLE
-    _handle_length: float
-    _handle_position: float
+    _handle_length: float # Seconds
+    _handle_position: float # Seconds
 
     def __init__(self, file_path: T.Union[str, Path]):
         super(Song, self).__init__()
@@ -145,49 +140,3 @@ class Song:
 
     def __hash__(self):
         return hash(self.file_path)
-
-
-
-if HAS_PYSIDE2:
-    class QtSong(QtCore.QObject, Song):
-        position_updated = QtCore.Signal(int)
-        song_finished = QtCore.Signal()
-
-        timer: QtCore.QTimer
-
-        def __init__(self, file_path, precision: int=500):
-            """
-
-            :param file_path: A valid file path to a music file
-            :param precision: how often, in milliseconds, to pulse/emit song position in seconds
-            """
-            QtCore.QObject.__init__(self)
-            Song.__init__(self, file_path)
-
-            self.timer = QtCore.QTimer(self)
-            self.timer.setInterval(precision)
-            self.timer.timeout.connect(self.pulser)
-
-        @QtCore.Slot(int)
-        def pulser(self):
-            position = BassChannel.GetPositionSeconds(self.handle)
-            self.position_updated.emit(position)
-
-        def __del__(self) -> None:
-            """
-            I vaguely remember that exceptions from __del__ can be problematic but I'd rather
-             this entire thing crash and burn than create a growing memory leak.
-            Returns: None
-            """
-            self.free_stream()
-
-
-        def play(self):
-            super(QtSong, self).play()
-            self.timer.start()
-
-        def stop(self):
-            super(QtSong, self).stop()
-            self.timer.stop()
-
-
