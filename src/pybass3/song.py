@@ -71,6 +71,11 @@ class Song:
         return BassChannel.GetLengthBytes(self.handle)
 
     @property
+    def remaining_seconds(self):
+        return self.position - self.duration
+
+
+    @property
     def handle(self) -> HANDLE:
         if self._handle is None:
             self._create_stream()
