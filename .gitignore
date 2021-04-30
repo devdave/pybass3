@@ -95,8 +95,8 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 .idea/workspace.xml___jb_old___
 .idea/workspace.xml___jb_tmp___
-scratchpads/cef/error.log
-data_scratchpad/pysongman.sqlite3
 .idea/dataSources.xml
-data_scratchpad/pysongman.sqlite3-journal
+# Github ignores
 .pypirc
+.idea/misc.xml
+.idea/pybass3.iml
