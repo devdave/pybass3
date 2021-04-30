@@ -9,6 +9,8 @@ Qt = QtCore.Qt
 
 from pys2_song import Pys2Song
 
+from .playlist import Playlist
+
 
 class Pys2Playlist(QtCore.QObject, Playlist):
     song_added = QtCore.Signal(int)  # Song ID, Qt DOES NOT like when I try to pass the Song object
