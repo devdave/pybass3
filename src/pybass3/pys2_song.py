@@ -28,7 +28,7 @@ class Pys2Song(QtCore.QObject, Song):
     @QtCore.Slot(int)
     def pulser(self):
 
-        self.position_updated.emit(position)
+        self.position_updated.emit(self.position)
 
         if self.remaining_bytes == 0:
             self.stop()
