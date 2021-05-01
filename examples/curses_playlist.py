@@ -41,6 +41,11 @@ def f2t(raw): # Float To Time
     minutes = int(raw // 60)
     return f"{minutes:02}:{seconds:02}"
 
+def center_text(window, line_pos, text, display_width):
+    middle = max(0, (display_width // 2) - len(text) // 2)
+    window.addstr(line_pos, middle, text)
+
+
 def main(song_dir):
     screen = init()
     screen.clear()
@@ -96,42 +101,44 @@ def main(song_dir):
 
 
 
-
         song = playlist.current
 
         display.clear()
-
         display.border('|', '|', '-', '-', '+', '+', '+', '+')
 
         playcount = f"Playlist position: {playlist.queue_position+1}/{len(playlist.queue)}"
-        plen = len(playcount)/2
-        middle = int(60 - plen)
+        center_text(display, 0, playcount, 120)
 
-        display.addstr(0, middle, playcount)
+        filename = f"Song: {song.file_path.name}"
+        center_text(display, 1, filename, 120)
 
-        filename = f"Song: {song.file_path.as_posix()}"
-        flen = len(filename)/2
-        middle = int(60 - flen)
-
-        display.addstr(1,middle, filename)
         counter = f"{f2t(song.position)} / {f2t(song.duration)}"
+        center_text(display, 2, counter, 120)
 
-        #Find the middle
-        clen = len(counter)
-        middle = 60 - clen//2
+        perc_done = (song.position_bytes / song.duration_bytes)
 
-        display.addstr(2, middle, f"{f2t(song.position)} / {f2t(song.duration)}")
+        progress_perc = f"{int(100 * perc_done)}%"
+        tick_end = int(98*perc_done)
+        progress_line = "=" * tick_end
+        display.addstr(3, 10, "[")
+        display.addstr(3, 11, progress_line)
+        display.addstr(3, 100, "]")
+
+        center_text(display, 3, progress_perc, 120)
+
+        control1 = "Z - Previous; X - Play; C - Pause; V - Stop; B - Next"
+        control2 = "A - Back 10 seconds; D - Forward 10 seconds"
+        control3 = "S - Sequential playlist;  R - random playlist"
+        control4 = "Q - Quit"
+
+        for pos, line in enumerate([control1, control2, control3, control4], 5):
+            center_text(display, pos, line, 120)
+
         display.refresh()
-
         curses.napms(750)
         playlist.tick()
 
-
-
-
-
     shutdown()
-
 
 
 if __name__ == "__main__":
