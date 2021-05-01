@@ -60,25 +60,22 @@ class Playlist:
         self.song_cls = song_cls
 
     @property
-    def song_id(self):
-        if self.queue_position is None:
-            if self.mode == PlaylistMode.sequential:
-                self.set_sequential()
-            else:
-                self.set_randomize()
-
-            if self.queue_position is None:
-                self.queue_position = 0
-
-        return self.queue[self.queue_position]
+    def current_song_id(self):
+        return self.current.id
 
     def add_song(self, song_path):
         song = self.song_cls(song_path)
-        song.duration
-        song.free_stream()
-        self.songs.append(song)
-        self.queue.append(len(self.songs)-1)
-        return len(self.songs)-1, song
+        try:
+            song.duration
+        except BassException as bexc:
+            if bexc.code == 41:
+                # bad formatted song
+                print(bexc)
+                return None
+            raise bexc
+
+        else:
+            song.free_stream()
             self.songs[song.id] = song
             self.queue.append(song.id)
             return song.id, song
@@ -95,15 +92,15 @@ class Playlist:
                 self.add_directory(fdir, recurse)
 
     @property
-    def fade(self):
+    def fadein(self):
         return self.fade_in
 
-    @fade.setter
-    def fade(self, value):
+    @fadein.setter
+    def fadein(self, value):
         self.fade_in = value
 
-    @fade.deleter
-    def fade(self):
+    @fadein.deleter
+    def fadein(self):
         self.fade_in = None
 
     def set_randomize(self):
@@ -138,6 +135,8 @@ class Playlist:
         if self.current_song is not None:
             self.current_song.free_stream()
 
+        del self.current_song
+
 
 
     @property
@@ -154,6 +153,7 @@ class Playlist:
 
         return self.songs[song_id]
 
+
     @property
     def prior(self):
         qpos = self.queue_position - 1
@@ -167,9 +167,13 @@ class Playlist:
 
         return self.songs[song_id]
 
+
+
     def song_playing(self, song: Song):
         """
-            Helper/hook that is intended for event driven Playlist inheriting classes
+            Helper/hook that is intended for event driven Playlist inheriting classes.
+
+            Intentionally empty.
 
         :param song:
         :return:
@@ -190,8 +194,11 @@ class Playlist:
 
             self.queue_position = 0
             current_id = self.queue[self.queue_position]
-            self.current_song = self.songs[current_id]
+            self.current = self.songs[current_id]
         self.current.play()
+
+        self.song_playing(self.current)
+
 
 
     def stop(self):
@@ -222,7 +229,7 @@ class Playlist:
         except BassException:
             if self.error_mode == PlaylistMode.progress_on_error:
                 self.queue_position += 1
-                if self.queue_position > len(self.queue):
+                if self.queue_position > len(self.queue) and self.mode == PlaylistMode.loop_all:
                     self.queue_position = 0
 
                 return self._next()
@@ -233,15 +240,19 @@ class Playlist:
             self.current.stop()
             self.current = self.fadein_song
             self.fadein_song = None
+            return
 
-        else:
-            self.current.free_stream()
-            self.current = self.upcoming
-            if self.current is not None:
-                self.current.play()
+
+        self.current.free_stream()
+        self.current = self.upcoming
+        self.queue_position += 1
+        if self.current is not None:
+            self.current.play()
+            return
+
 
         self.queue_position += 1
-        if self.queue_position > len(self.queue):
+        if self.queue_position > len(self.queue) and self.mode == PlaylistMode.loop_all:
             self.queue_position = 0
 
         song_id = self.queue[self.queue_position]
@@ -269,9 +280,10 @@ class Playlist:
             self.current.move2position_seconds(0)
             self.current.play()
         else:
-            self.current_song.free_stream()
-            self.current_song = prior
-            self.current_song.play()
+            self.current.free_stream()
+            self.current = prior
+            self.current.play()
+
 
             self.queue_position -= 1
             if self.queue_position < 0:
@@ -281,23 +293,19 @@ class Playlist:
         return song_id, self.current
 
     def tick(self):
-        current_pos = self.current.position_bytes
-        current_duration = self.current.duration_bytes
-        remaining = current_duration - current_pos
-        remaining_seconds = self.current.duration - self.current.position
+        remaining = self.current.remaining_bytes
+        remaining_seconds = self.current.remaining_seconds
 
-        if self.play_mode == PlaylistMode.loop_single:
-            if current_pos >= current_duration:
-                self.current.move2position_seconds(0)
+        if self.play_mode == PlaylistMode.loop_single and remaining == 0:
+            self.current.move2position_seconds(0)
 
         elif self.fade_in is not None and remaining_seconds <= self.fade_in:
-            if self.fadein_song is not None:
-                if remaining <= 0:
-                    self.current.stop()
-                    self.current.free_stream()
-                    self.current = self.fadein_song
-                    self.fadein_song = None
-                    self.queue_position += 1
+            if self.fadein_song is not None and remaining <= 0:
+                self.current.stop()
+                self.current.free_stream()
+                self.current = self.fadein_song
+                self.fadein_song = None
+                self.queue_position += 1
             elif self.upcoming is not None:
                 self.fadein_song = self.upcoming
                 self.fadein_song.play()
@@ -306,6 +314,7 @@ class Playlist:
             self.current.stop()
             self.current.free_stream()
             self.next()
+            self.queue_position += 1
             self.current.play()
 
     def items(self):

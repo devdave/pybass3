@@ -27,11 +27,10 @@ class Pys2Song(QtCore.QObject, Song):
 
     @QtCore.Slot(int)
     def pulser(self):
-        position = BassChannel.GetPositionBytes(self.handle)
-        duration = BassChannel.GetLengthBytes(self.handle)
+
         self.position_updated.emit(position)
 
-        if position >= duration:
+        if self.remaining_bytes == 0:
             self.stop()
             self.song_finished.emit()
 
@@ -46,6 +45,11 @@ class Pys2Song(QtCore.QObject, Song):
 
     def play(self):
         super(Pys2Song, self).play()
+        self.timer.start()
+
+    def pause(self):
+        super(Pys2Song, self).pause()
+        self.timer.stop()
 
     def stop(self):
         super(Pys2Song, self).stop()
