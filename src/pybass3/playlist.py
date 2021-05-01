@@ -36,7 +36,7 @@ class Playlist:
     play_mode: PlaylistMode # is the playlist looping the whole queue, just a song, or running to end?
 
     queue_position: int  # Where is the playlist in the current queue
-    current_song: Song # What is currently playing
+    _current_song: Song # What is currently playing
     fadein_song: Song # if fade_in is not None, this is the next song to play
     fade_in: int # How soon should the next song start playing, None if lock step
     song_cls: Song # What is the container for a song (eg Song or QtSong)
@@ -53,7 +53,7 @@ class Playlist:
         self.error_mode = PlaylistMode.progress_on_error
 
         self.queue_position = None
-        self.current_song = None
+        self._current_song = None
 
         self.fade_in = None
         self.fadein_song = None
@@ -121,21 +121,28 @@ class Playlist:
 
     @property
     def current(self) -> Song:
-        return self.current_song
+        return self._current_song
 
     @current.setter
     def current(self, new_song):
-        if self.current_song is not None:
-            self.current_song.free_stream()
-        self.current_song = new_song
-        return self.current_song
+        if self._current_song is not None:
+            if self._current_song.is_playing:
+                self._current_song.stop()
+
+            self._current_song.free_stream()
+
+        self._current_song = new_song
+        return self._current_song
 
     @current.deleter
     def current(self):
-        if self.current_song is not None:
-            self.current_song.free_stream()
+        if self._current_song is not None:
+            if self._current_song.is_playing():
+                self._current_song.stop()
 
-        del self.current_song
+            self._current_song.free_stream()
+
+        del self._current_song
 
 
 
