@@ -20,6 +20,8 @@ def init():
         curses.cbreak()
         SCREEN.nodelay(True)
         SCREEN.keypad(True)
+        curses.curs_set(False)
+
 
     return SCREEN
 
@@ -30,6 +32,7 @@ def shutdown():
         curses.nocbreak()
         SCREEN.nodelay(False)
         SCREEN.keypad(False)
+        curses.curs_set(True)
         curses.endwin()
         SCREEN = None
 
@@ -98,6 +101,8 @@ def main(song_dir):
 
         display.clear()
 
+        display.border('|', '|', '-', '-', '+', '+', '+', '+')
+
         playcount = f"Playlist position: {playlist.queue_position+1}/{len(playlist.queue)}"
         plen = len(playcount)/2
         middle = int(60 - plen)
@@ -135,6 +140,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     try:
         main(args.song_dir)
+        print("Program exited gracefully")
     finally:
         shutdown()
 
