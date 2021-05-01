@@ -104,14 +104,24 @@ class Playlist:
         self.fade_in = None
 
     def set_randomize(self):
+        if self.current is not None:
+            self.stop()
+
         ids = list(self.songs.keys())
         random.shuffle(ids)
         self.queue = ids
         self.mode = PlaylistMode.random
+        self.queue_position = 0
+
 
     def set_sequential(self):
+        if self.current is not None:
+            self.stop()
+
         self.queue = list(self.songs.keys())
         self.mode = PlaylistMode.sequential
+        self.queue_position = 0
+
 
     def loop_song(self):
         self.play_mode = PlaylistMode.loop_single
