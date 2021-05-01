@@ -72,8 +72,8 @@ class Song:
 
     @property
     def position_time(self):
-        seconds = self.position % 60
-        minutes = self.position // 60
+        seconds = int(self.position % 60)
+        minutes = int(self.position // 60)
 
         return f"{minutes:02}:{seconds:02}"
 
@@ -90,8 +90,8 @@ class Song:
 
     @property
     def duration_time(self):
-        seconds = self.duration % 60
-        minutes = self.duration // 60
+        seconds = int(self.duration % 60)
+        minutes = int(self.duration // 60)
         return f"{minutes:02}:{seconds:02}"
 
     @property
@@ -104,8 +104,8 @@ class Song:
 
     @property
     def remaining_time(self):
-        seconds = self.remaining_seconds % 60
-        minutes = self.remaining_seconds // 60
+        seconds = int(self.remaining_seconds % 60)
+        minutes = int(self.remaining_seconds // 60)
         return f"{minutes:02}:{seconds:02}"
 
 
