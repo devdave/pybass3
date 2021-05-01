@@ -1,5 +1,5 @@
 
-__ALL__ = ["Song", "Bass", "BassException", "BassChannel", "BassStream"]
+__all__ = ["Song", "Playlist", "Bass", "BassException", "BassChannel", "BassStream"]
 
 from .song import Song
 from .playlist import Playlist
