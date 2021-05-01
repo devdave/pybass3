@@ -69,6 +69,30 @@ def main(song_dir):
             playlist.stop()
         elif key == "b":
             playlist.next()
+        elif key == "d":
+            # Move forward N seconds
+            song = playlist.current
+            new_position = min(song.duration, song.position + 10)
+            song.move2position_seconds(new_position)
+        elif key == "a":
+            # Move backward N seconds
+            song = playlist.current
+            new_position = max(0, song.position - 10)
+            song.move2position_seconds(new_position)
+
+        elif key == "r":
+            playlist.set_randomize()
+            playlist.stop()
+            playlist.queue_position = 0
+            playlist.play()
+        elif key == "s":
+            playlist.set_sequential()
+            playlist.stop()
+            playlist.queue_position = 0
+            playlist.play()
+
+
+
 
         song = playlist.current
 
