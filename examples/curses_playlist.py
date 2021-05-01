@@ -79,7 +79,12 @@ def main(song_dir):
         middle = int(60 - plen)
 
         display.addstr(0, middle, playcount)
-        display.addstr(1,0, f"Song: {song.file_path.as_posix()}")
+
+        filename = f"Song: {song.file_path.as_posix()}"
+        flen = len(filename)/2
+        middle = int(60 - flen)
+
+        display.addstr(1,middle, filename)
         counter = f"{f2t(song.position)} / {f2t(song.duration)}"
 
         #Find the middle
