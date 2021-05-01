@@ -41,7 +41,7 @@ def f2t(raw): # Float To Time
     minutes = int(raw // 60)
     return f"{minutes:02}:{seconds:02}"
 
-def center_text(window, line_pos, text, display_width):
+def print_centered_text(window, line_pos, text, display_width):
     middle = max(0, (display_width // 2) - len(text) // 2)
     window.addstr(line_pos, middle, text)
 
@@ -107,13 +107,13 @@ def main(song_dir):
         display.border('|', '|', '-', '-', '+', '+', '+', '+')
 
         playcount = f"Playlist position: {playlist.queue_position+1}/{len(playlist.queue)}"
-        center_text(display, 0, playcount, 120)
+        print_centered_text(display, 0, playcount, 120)
 
         filename = f"Song: {song.file_path.name}"
-        center_text(display, 1, filename, 120)
+        print_centered_text(display, 1, filename, 120)
 
         counter = f"{f2t(song.position)} / {f2t(song.duration)}"
-        center_text(display, 2, counter, 120)
+        print_centered_text(display, 2, counter, 120)
 
         perc_done = (song.position_bytes / song.duration_bytes)
 
@@ -124,7 +124,7 @@ def main(song_dir):
         display.addstr(3, 11, progress_line)
         display.addstr(3, 100, "]")
 
-        center_text(display, 3, progress_perc, 120)
+        print_centered_text(display, 3, progress_perc, 120)
 
         control1 = "Z - Previous; X - Play; C - Pause; V - Stop; B - Next"
         control2 = "A - Back 10 seconds; D - Forward 10 seconds"
@@ -132,7 +132,7 @@ def main(song_dir):
         control4 = "Q - Quit"
 
         for pos, line in enumerate([control1, control2, control3, control4], 5):
-            center_text(display, pos, line, 120)
+            print_centered_text(display, pos, line, 120)
 
         display.refresh()
         curses.napms(750)
