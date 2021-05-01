@@ -19,7 +19,7 @@ def main(song_file):
     print(f"Bytes: {len_bytes=}")
 
     while position_bytes < len_bytes:
-        print(song.position, song.duration)
+        print(song.position_time, "/", song.duration_time)
         time.sleep(1)
 
 
