@@ -158,7 +158,7 @@ class Simple(QtWidgets.QWidget):
             if self.song is not None:
                 del self.song
 
-            self.song = QtSong(file)
+            self.song = Pys2Song(file)
             # Assure the song loads correctly
             try:
                 self.song.handle is not None
