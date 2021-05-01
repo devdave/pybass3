@@ -1,3 +1,10 @@
+"""
+Dirt simple command line music/sound file player.
+
+Makes 0(zero) effort to handle unexpected bugs for the sake of
+clarity.
+
+"""
 from argparse import ArgumentParser
 
 from pybass3 import Song
