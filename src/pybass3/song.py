@@ -71,6 +71,13 @@ class Song:
         return BassChannel.GetPositionBytes(self.handle)
 
     @property
+    def position_time(self):
+        seconds = self.position % 60
+        minutes = self.position // 60
+
+        return f"{minutes:02}:{seconds:02}"
+
+    @property
     def duration(self) -> float:
         if self._handle is None:
             self._create_stream()
@@ -82,12 +89,24 @@ class Song:
         return BassChannel.GetLengthBytes(self.handle)
 
     @property
+    def duration_time(self):
+        seconds = self.duration % 60
+        minutes = self.duration // 60
+        return f"{minutes:02}:{seconds:02}"
+
+    @property
     def remaining_seconds(self):
         return self.duration - self.position
 
     @property
     def remaining_bytes(self):
         return self.duration_bytes - self.position_bytes
+
+    @property
+    def remaining_time(self):
+        seconds = self.remaining_seconds % 60
+        minutes = self.remaining_seconds // 60
+        return f"{minutes:02}:{seconds:02}"
 
 
     @property
