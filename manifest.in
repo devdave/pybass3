@@ -1,2 +1,4 @@
-include pybass3/vendor/*
+include src/pybass3/vendor/*.dll
+include src/pybass3/vendor/*.h
+include src/pybass3/vendor/*.txt
 global-exclude *.pyc
