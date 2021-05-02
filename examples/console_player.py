@@ -13,14 +13,14 @@ import time
 def main(song_file):
     song = Song(song_file)
     song.play()
-    len_bytes = song.duration_bytes
-    position_bytes = song.position_bytes
     print("Playing: ", song_file)
-    print(f"Bytes: {len_bytes=}")
+    print(f"Bytes: {song.remaining_bytes=}")
 
-    while position_bytes < len_bytes:
+    while song.remaining_bytes > 0:
         print(song.position_time, "/", song.duration_time)
         time.sleep(1)
+
+    print("Song finished")
 
 
 if __name__ == "__main__":
