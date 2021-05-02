@@ -1,5 +1,5 @@
 """
-    Run a basic playlist controllered player in curses
+    Run a basic playlist controlled player in curses
     `python -m pip install windows-curses`
 """
 import argparse
