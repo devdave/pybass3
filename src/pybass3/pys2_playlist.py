@@ -25,13 +25,15 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         QtCore.QObject.__init__(self)
         Playlist.__init__(self, Pys2Song)
 
+
+
     def add_song(self, song_path):
         return super(Playlist, self).add_song(song_path)
 
     def play(self):
         super(QtPlaylist, self).play()
-        if self.current.is_playing:
-            self.music_playing.emit(self.song_id)
+        if self.current.is_playing and self.current is not None:
+            self.music_playing.emit(self.current.id)
 
     def play_song(self, song_id):
         if self.fadein_song is not None:
@@ -49,13 +51,13 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
     def stop(self):
         super(Playlist, self).stop()
-        if self.current.is_stopped:
-            self.music_stopped.emit(self.song_id)
+        if self.current.is_stopped and self.current is not None:
+            self.music_stopped.emit(self.current.id)
 
     def pause(self):
         super(Playlist, self).pause()
-        if self.current.is_paused:
-            self.music_paused.emit(self.song_id)
+        if self.current.is_paused and self.current is not None:
+            self.music_paused.emit(self.current.id)
 
 
 
