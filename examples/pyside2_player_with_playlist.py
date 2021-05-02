@@ -9,8 +9,8 @@ from PySide2 import QtCore
 
 Qt = QtCore.Qt
 
-from pybass3.playlist import QtPlaylist
-from pybass3.song import QtSong
+from pybass3.pys2_playlist import Pys2Playlist
+from pybass3.pys2_song import Pys2Song
 from pybass3 import BassException
 
 log = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ class PlaylistModel(QtCore.QAbstractTableModel):
 
 
 
-    def __init__(self, playlist: QtPlaylist):
+    def __init__(self, playlist: Pys2Playlist):
         super(PlaylistModel, self).__init__()
         self.playlist = playlist
         log.debug("initialized")
@@ -86,20 +86,16 @@ class PlaylistModel(QtCore.QAbstractTableModel):
 
 
 
-
-
-
-
 class PlayerControl(QtCore.QObject):
 
-    playlist: QtPlaylist
+    playlist: Pys2Playlist
     model: PlaylistModel
     progress_mousedown: bool
 
 
     def __init__(self):
         super(PlayerControl, self).__init__()
-        self.playlist = QtPlaylist()
+        self.playlist = Pys2Playlist()
         self.model = PlaylistModel(self.playlist)
 
         self.progress_mousedown = False
