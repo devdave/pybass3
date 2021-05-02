@@ -80,6 +80,18 @@ class Playlist:
             self.queue.append(song.id)
             return song.id, song
 
+    def get_song_by_row(self, row_position:int) -> Song:
+        try:
+            key = list(self.songs.keys())[row_position]
+        except IndexError:
+            return None
+
+        return self.songs[key]
+
+    def get_song_by_id(self, song_id) -> Song:
+        return self.songs.get(song_id, None)
+
+
     def add_directory(self, dir_path: Path, recurse=True):
         files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix in self.VALID_TYPES)
         dirs = (fdir for fdir in dir_path.iterdir() if fdir.is_dir())
