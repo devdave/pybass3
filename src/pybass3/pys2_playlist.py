@@ -13,11 +13,13 @@ from .playlist import Playlist
 
 
 class Pys2Playlist(QtCore.QObject, Playlist):
-    song_added = QtCore.Signal(int)  # Song ID, Qt DOES NOT like when I try to pass the Song object
-    song_changed = QtCore.Signal(int)  # Song ID
-    music_paused = QtCore.Signal(int)
-    music_playing = QtCore.Signal(int)
-    music_stopped = QtCore.Signal(int)
+    song_added = QtCore.Signal(str)  # Song ID, Qt DOES NOT like when I try to pass the Song object
+    song_changed = QtCore.Signal(str)  # Song ID
+    music_paused = QtCore.Signal(str)
+    music_playing = QtCore.Signal(str)
+    music_stopped = QtCore.Signal(str)
+
+    timer: QtCore.QTimer
 
     def __init__(self):
         QtCore.QObject.__init__(self)
