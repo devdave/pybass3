@@ -118,7 +118,7 @@ def main(song_dir):
         perc_done = (song.position_bytes / song.duration_bytes)
 
         progress_perc = f"{int(100 * perc_done)}%"
-        tick_end = int(88*perc_done)
+        tick_end = int(89*perc_done)
         progress_line = "=" * tick_end
         display.addstr(3, 10, "[")
         display.addstr(3, 11, progress_line)
