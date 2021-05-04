@@ -1,4 +1,11 @@
+"""
+    Playlist class
 
+    Manages a list of songs, providing both static sequential & randomized play queues along
+    with the ability to fade in the next song in the queue by N-seconds.
+
+    Does the best it can to avoid ctype's originating memory leaks.
+"""
 import enum
 import pathlib
 from pathlib import Path
