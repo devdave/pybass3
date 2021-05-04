@@ -270,6 +270,25 @@ class Playlist:
         song.play()
         return song
 
+    def play_song_by_id(self, song_id):
+        song = self.songs.get(song_id, None)
+        if song is None:
+            #TODO raise an error here?
+            return None
+
+        del self.fadein_song
+        del self.current
+
+        self.current = song
+        self.play()
+
+    def play_song_by_index(self, song_index):
+        song = self.get_song_by_row(song_index)
+
+        del self.fadein_song
+        del self.current
+
+
     def stop(self):
         if self.fadein_song is not None:
             self.fadein_song.stop()
