@@ -1,5 +1,6 @@
 
 import enum
+import pathlib
 from pathlib import Path
 import random
 import logging
@@ -67,7 +68,7 @@ class Playlist:
     def current_song_id(self):
         return self.current.id
 
-    def add_song(self, song_path):
+    def add_song(self, song_path: pathlib.Path, add2queue=True):
         log.debug("Playlist.add_song called with %s", song_path)
         song = self.song_cls(song_path)
         try:
