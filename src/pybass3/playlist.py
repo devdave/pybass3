@@ -168,10 +168,7 @@ class Playlist:
     @current.setter
     def current(self, new_song):
         if self._current_song is not None:
-            if self._current_song.is_playing:
-                self._current_song.stop()
-
-            self._current_song.free_stream()
+            del self.current
 
         self._current_song = new_song
         return self._current_song
@@ -200,7 +197,6 @@ class Playlist:
             self._fadein_song.free_stream()
             self._fadein_song = None
 
-        del self._current_song
 
 
 
@@ -379,8 +375,7 @@ class Playlist:
             self.current.move2position_seconds(0)
             self.current.play()
         else:
-            if self.current is not None:
-                self.current.free_stream()
+            del self.current
 
             self.current = prior
 
@@ -406,8 +401,6 @@ class Playlist:
 
         elif self.fade_in is not None and remaining_seconds <= self.fade_in:
             if self.fadein_song is not None and remaining <= 0:
-                self.current.stop()
-                self.current.free_stream()
                 self.current = self.fadein_song
                 self.fadein_song = None
                 self.queue_position += 1
@@ -416,8 +409,7 @@ class Playlist:
                 self.fadein_song.play()
 
         elif remaining <= 0:
-            self.current.stop()
-            self.current.free_stream()
+            del self.current
             self.next()
             self.queue_position += 1
             self.current.play()
