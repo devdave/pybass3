@@ -42,10 +42,19 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         return super(Pys2Playlist, self).add_song(song_path)
 
     def play(self):
-        super(QtPlaylist, self).play()
-        if self.current.is_playing and self.current is not None:
         log.debug("Pys2Playlist.play self.current is %s", self.current)
+        new_song = False
+
+        if self.current is None:
+            new_song = True
+
+        super(Pys2Playlist, self).play()
+        if self.current is not None and self.current.is_playing:
             self.music_playing.emit(self.current.id)
+            self.ticker.start()
+
+        if new_song is True and self.current is not None:
+            self.song_changed.emit(self.current.id)
 
     def play_song(self, song_id):
         log.debug("Pys2Playlist.play_song %s", song_id)
@@ -60,14 +69,19 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         self.current = self.songs[song_id]
         self.current.play()
+        self.ticker.start()
 
+        self.song_changed.emit(song_id)
         self.music_playing.emit(song_id)
 
     def stop(self):
-        super(Playlist, self).stop()
-        if self.current.is_stopped and self.current is not None:
         log.debug("Pys2Playlist.stop called")
+
+        super(Pys2Playlist, self).stop()
+        if self.current is not None:
             self.music_stopped.emit(self.current.id)
+            
+        self.ticker.stop()
 
     def pause(self):
         log.debug("Pys2Playlist.pause called")
@@ -75,8 +89,23 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         if self.current is not None:
             self.music_paused.emit(self.current.id)
 
+        self.ticker.stop()
+        
+    def previous(self):
         log.debug("Pys2Playlist.previous")
+        result = super(Pys2Playlist, self).previous()
+        log.debug("Pys2Playlist.previous changed to %s", result)
+        if result is not None:
+            self.song_changed.emit(result.id)
+        
+    def next(self):
+        log.debug("Pys2Playlist.next")
+        result = super(Pys2Playlist, self).next()
+        log.debug("Next song is %s", result)
+        if result is not None:
+            self.song_changed.emit(result.id)
 
+        return result
 
 
     def tick(self):
