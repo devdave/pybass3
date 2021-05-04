@@ -266,13 +266,13 @@ class Playlist:
 
         self.queue_position = 0
         try:
-            song = self.songs[self.queue[self.queue_position]]
+            self.current = self.songs[self.queue[self.queue_position]]
         except IndexError:
             return None
         except KeyError:
             raise RuntimeError("Song queue is corrupt/out of sync with song list")
 
-        song.play()
+        self.current.play()
         return song
 
     def play_song_by_id(self, song_id):
