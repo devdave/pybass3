@@ -40,7 +40,7 @@ class Playlist:
 
     queue_position: int  # Where is the playlist in the current queue
     _current_song: Song # What is currently playing
-    fadein_song: Song # if fade_in is not None, this is the next song to play
+    _fadein_song: Song # if fade_in is not None, this is the next song to play
     fade_in: int # How soon should the next song start playing, None if lock step
     song_cls: Song # What is the container for a song (eg Song or QtSong)
 
@@ -59,7 +59,7 @@ class Playlist:
         self._current_song = None
 
         self.fade_in = None
-        self.fadein_song = None
+        self._fadein_song = None
         self.song_cls = song_cls
 
         log.debug("Playlist Initialized")
@@ -183,6 +183,22 @@ class Playlist:
                 self._current_song.stop()
 
             self._current_song.free_stream()
+    @property
+    def fadein_song(self):
+        return self._fadein_song
+
+    @fadein_song.setter
+    def set_fadein_song(self, new_song):
+        if self._fadein_song is not None:
+            self._fadein_song.freestream()
+
+        self._fadein_song = new_song
+
+    @fadein_song.deleter
+    def del_fadein_song(self):
+        if self._fadein_song is not None:
+            self._fadein_song.free_stream()
+            self._fadein_song = None
 
         del self._current_song
 
