@@ -373,7 +373,7 @@ class Playlist:
         except IndexError:
             return None, None
 
-        return song_id, self.current
+        return self.current
 
     def tick(self):
         remaining = self.current.remaining_bytes
