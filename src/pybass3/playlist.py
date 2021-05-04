@@ -248,6 +248,22 @@ class Playlist:
         elif self.current is not None and (self.current.is_paused or self.current.is_stopped):
             self.current.play()
 
+    def play_first(self):
+        if self.fadein_song is not None:
+            self.fadein_song.free_stream()
+            self.fadein_song = None
+
+        self.queue_position = 0
+        try:
+            song = self.queue_position[self.queue_position]
+        except IndexError:
+            return None
+
+        song.play()
+        return song
+
+
+
 
 
     def stop(self):
