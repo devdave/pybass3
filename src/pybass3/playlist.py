@@ -217,18 +217,6 @@ class Playlist:
         return self.songs[song_id]
 
 
-
-    def song_playing(self, song: Song):
-        """
-            Helper/hook that is intended for event driven Playlist inheriting classes.
-
-            Intentionally empty.
-
-        :param song:
-        :return:
-        """
-        return
-
     def play(self):
 
         if self.fadein_song is not None:
