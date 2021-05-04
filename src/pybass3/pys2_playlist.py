@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 
 class Pys2Playlist(QtCore.QObject, Playlist):
     song_added = QtCore.Signal(str)  # Song ID, Qt DOES NOT like when I try to pass the Song object
+    songs_added = QtCore.Signal(list) # list of Song ID's
     song_changed = QtCore.Signal(str)  # Song ID
     music_paused = QtCore.Signal(str)
     music_playing = QtCore.Signal(str)
