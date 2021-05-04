@@ -13,3 +13,14 @@ Version change history
 * Multiple bug fixes
 
 
+0.0.3
+-----
+* Semi-flaky/rough draft playlist controlled
+ QT app example added
+  
+* Multiple adjustments and tuning to playlist to resolve
+next and transition logic.
+  
+* Multiple fixes to Pys2Playlist so that it behaves
+correctly.
+  
