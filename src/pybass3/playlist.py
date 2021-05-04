@@ -118,8 +118,12 @@ class Playlist:
         song_ids = []
 
         for song_path in files:
-            song_id, song = self.add_song(song_path)
-            song_ids.append(song_id)
+            try:
+                song_id, song = self.add_song(song_path)
+                song_ids.append(song_id)
+            except TypeError:
+                pass
+
 
         if recurse is True:
             for fdir in dirs:
