@@ -196,14 +196,14 @@ class Playlist:
         return self._fadein_song
 
     @fadein_song.setter
-    def set_fadein_song(self, new_song):
+    def fadein_song(self, new_song):
         if self._fadein_song is not None:
             self._fadein_song.freestream()
 
         self._fadein_song = new_song
 
     @fadein_song.deleter
-    def del_fadein_song(self):
+    def fadein_song(self):
         if self._fadein_song is not None:
             self._fadein_song.free_stream()
             self._fadein_song = None
