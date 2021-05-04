@@ -251,9 +251,7 @@ class Playlist:
             self.current.play()
 
     def play_first(self):
-        if self.fadein_song is not None:
-            self.fadein_song.free_stream()
-            self.fadein_song = None
+        del self.fadein_song
 
         self.queue_position = 0
         try:
@@ -305,8 +303,7 @@ class Playlist:
 
     def restart(self):
         if self.fadein_song is not None:
-            self.fadein_song.free_stream()
-            self.fadein_song = None
+            del self.fadein_song
 
         if self.current is not None:
             return self.current.move2position_seconds(0)
@@ -370,8 +367,7 @@ class Playlist:
     def _previous(self):
         prior = self.prior
         if self.fadein_song is not None:
-            self.fadein_song.free_stream()
-            self.fadein_song = None
+            del self.fadein_song
             self.current.move2position_seconds(0)
             self.current.play()
         else:
