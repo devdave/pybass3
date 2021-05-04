@@ -52,7 +52,7 @@ class Playlist:
 
         self.error_mode = PlaylistMode.progress_on_error
 
-        self.queue_position = None
+        self.queue_position = 0
         self._current_song = None
 
         self.fade_in = None
