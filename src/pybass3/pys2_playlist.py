@@ -10,6 +10,7 @@ from PySide2 import QtCore
 Qt = QtCore.Qt
 
 from .pys2_song import Pys2Song
+from .playlist import Playlist, PlaylistMode
 
 log = logging.getLogger(__name__)
 
