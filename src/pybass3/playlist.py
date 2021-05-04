@@ -78,7 +78,7 @@ class Playlist:
                 # bad formatted song
                 print(bexc)
                 return None
-            raise bexc
+            print("Failed to load: ", song_path)
 
         else:
             song.free_stream()
