@@ -190,7 +190,8 @@ class PlayerController(QtCore.QObject):
             self.view.seek_bar.setValue(song.position_bytes)
 
     def do_state_update(self):
-        self.view.pl_position.setText(f"{self.playlist.queue_position}/{len(self.playlist.queue)}({len(self.playlist)})")
+        # Add 1 to queue position because it starts counting from 0
+        self.view.pl_position.setText(f"{self.playlist.queue_position+1}/{len(self.playlist.queue)}({len(self.playlist)})")
         if self.playlist.current is not None:
             song_name = self.playlist.current.file_path.name
             song_pos = self.playlist.current.position_time

@@ -142,6 +142,7 @@ class Playlist:
         self.queue = ids
         self.mode = PlaylistMode.random
         self.queue_position = 0
+        self.play_first()
 
 
     def set_sequential(self):
@@ -151,6 +152,7 @@ class Playlist:
         self.queue = list(self.songs.keys())
         self.mode = PlaylistMode.sequential
         self.queue_position = 0
+        self.play_first()
 
 
     def loop_song(self):
