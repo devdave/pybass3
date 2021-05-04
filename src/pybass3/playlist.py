@@ -245,16 +245,14 @@ class Playlist:
 
         self.queue_position = 0
         try:
-            song = self.queue[self.queue_position]
+            song = self.songs[self.queue[self.queue_position]]
         except IndexError:
             return None
+        except KeyError:
+            raise RuntimeError("Song queue is corrupt/out of sync with song list")
 
         song.play()
         return song
-
-
-
-
 
     def stop(self):
         if self.fadein_song is not None:
