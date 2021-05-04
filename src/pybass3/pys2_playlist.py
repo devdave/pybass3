@@ -36,9 +36,10 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
 
 
-    def add_song(self, song_path):
-        return super(Playlist, self).add_song(song_path)
+
+    def add_song(self, song_path) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
+        return super(Pys2Playlist, self).add_song(song_path)
 
     def play(self):
         super(QtPlaylist, self).play()
