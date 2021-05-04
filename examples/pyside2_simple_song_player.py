@@ -97,8 +97,6 @@ class Simple(QtWidgets.QWidget):
         self.add_table_row(0, "Library info", "")
         for pos, field_name in enumerate(lib_fields, 1):
             field_value = getattr(lib_info, field_name)
-            print(field_name, str(field_value))
-
             self.add_table_row(pos, field_name, repr(field_value))
 
         # IMPORTANT, fucking kill this struct as soon as possible to avoid memory leaks
