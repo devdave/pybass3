@@ -111,7 +111,8 @@ class Simple(QtWidgets.QWidget):
             field_value = getattr(device_info, field_name)
             self.add_table_row(pos, field_name, repr(field_value))
 
-
+        #Same as lib info, its important to free this ASAP once you have gotten what you need from it.
+        del device_info
 
         self.table.resizeColumnsToContents()
 
