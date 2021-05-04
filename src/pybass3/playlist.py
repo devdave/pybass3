@@ -176,10 +176,10 @@ class Playlist:
     @current.deleter
     def current(self):
         if self._current_song is not None:
-            if self._current_song.is_playing():
-                self._current_song.stop()
-
+            self._current_song.stop()
             self._current_song.free_stream()
+            self._current_song = None
+
     @property
     def fadein_song(self):
         return self._fadein_song
