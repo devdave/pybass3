@@ -90,14 +90,9 @@ def main(song_dir):
 
         elif key == "r":
             playlist.set_randomize()
-            playlist.stop()
-            playlist.queue_position = 0
-            playlist.play()
         elif key == "s":
             playlist.set_sequential()
-            playlist.stop()
-            playlist.queue_position = 0
-            playlist.play()
+
 
 
 
