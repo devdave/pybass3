@@ -108,12 +108,18 @@ class Playlist:
         files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix in self.VALID_TYPES)
         dirs = (fdir for fdir in dir_path.iterdir() if fdir.is_dir())
 
+        song_ids = []
+
         for song_path in files:
-            self.add_song(song_path)
+            song_id, song = self.add_song(song_path)
+            song_ids.append(song_id)
 
         if recurse is True:
             for fdir in dirs:
-                self.add_directory(fdir, recurse)
+                sub_song_ids = self.add_directory(fdir, recurse)
+                song_ids.extend(sub_song_ids)
+
+        return song_ids
 
     @property
     def fadein(self):
