@@ -70,9 +70,9 @@ class Pys2Playlist(QtCore.QObject, Playlist):
             self.music_stopped.emit(self.current.id)
 
     def pause(self):
-        super(Playlist, self).pause()
-        if self.current.is_paused and self.current is not None:
         log.debug("Pys2Playlist.pause called")
+        super(Pys2Playlist, self).pause()
+        if self.current is not None:
             self.music_paused.emit(self.current.id)
 
         log.debug("Pys2Playlist.previous")
