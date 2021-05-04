@@ -367,11 +367,6 @@ class Playlist:
 
             self.queue_position -= 1
             if self.queue_position < 0:
-                self.queue_position = len(self.queue)
-        try:
-            song_id = self.queue[self.queue_position]
-        except IndexError:
-            return None, None
 
         return self.current
 
