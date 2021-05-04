@@ -240,11 +240,13 @@ class Playlist:
                     self.set_randomize()
 
             self.queue_position = 0
-            current_id = self.queue[self.queue_position]
-            self.current = self.songs[current_id]
-        self.current.play()
+            if len(self.queue) > 0:
+                current_id = self.queue[self.queue_position]
+                self.current = self.songs[current_id]
+                self.current.play()
 
-        self.song_playing(self.current)
+        elif self.current is not None and (self.current.is_paused or self.current.is_stopped):
+            self.current.play()
 
 
 
@@ -252,14 +254,18 @@ class Playlist:
         if self.fadein_song is not None:
             self.fadein_song.stop()
 
-        self.current.stop()
+        if self.current is not None:
+            self.current.stop()
 
 
     def pause(self):
         if self.fadein_song is not None:
             self.fadein_song.pause()
 
-        return self.current.pause()
+        if self.current is not None:
+            return self.current.pause()
+
+        return None
 
 
     def restart(self):
@@ -267,10 +273,12 @@ class Playlist:
             self.fadein_song.free_stream()
             self.fadein_song = None
 
-        return self.current.move2position_seconds(0)
+        if self.current is not None:
+            return self.current.move2position_seconds(0)
 
 
-    def next(self):
+
+    def next(self) -> Song:
         try:
             return self._next()
         except BassException:
@@ -281,29 +289,33 @@ class Playlist:
 
                 return self._next()
 
-    def _next(self):
+    def _next(self) -> Song:
+
+        next_song = self.upcoming
+        # Advance the queue forward if we can
+        if self.queue_position + 1 >= len(self.queue):
+            if self.play_mode != PlaylistMode.loop_all:
+                self.queue_position = 0
+        else:
+            self.queue_position += 1
+
+
+        # stop the music
+        self.current.stop()
+        self.current.free_stream()
+
 
         if self.fadein_song is not None:
-            self.current.stop()
             self.current = self.fadein_song
-            self.fadein_song = None
-            return
+        else:
+            song_id = self.queue[self.queue_position]
+            self.current = self.songs[song_id]
 
-
-        self.current.free_stream()
-        self.current = self.upcoming
-        self.queue_position += 1
-        if self.current is not None:
+        if self.current is not None and self.current.is_playing is False:
             self.current.play()
-            return
 
+        return self.current
 
-        self.queue_position += 1
-        if self.queue_position > len(self.queue) and self.mode == PlaylistMode.loop_all:
-            self.queue_position = 0
-
-        song_id = self.queue[self.queue_position]
-        return song_id, self.current
 
     def previous(self):
         try:
@@ -327,16 +339,23 @@ class Playlist:
             self.current.move2position_seconds(0)
             self.current.play()
         else:
-            self.current.free_stream()
+            if self.current is not None:
+                self.current.free_stream()
+
             self.current = prior
-            self.current.play()
+
+            if self.current is not None:
+                self.current.play()
 
 
             self.queue_position -= 1
             if self.queue_position < 0:
                 self.queue_position = len(self.queue)
+        try:
+            song_id = self.queue[self.queue_position]
+        except IndexError:
+            return None, None
 
-        song_id = self.queue[self.queue_position]
         return song_id, self.current
 
     def tick(self):
