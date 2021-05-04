@@ -367,6 +367,10 @@ class Playlist:
 
             self.queue_position -= 1
             if self.queue_position < 0:
+                if self.play_mode == PlaylistMode.loop_all:
+                    self.queue_position = len(self.queue)
+                else:
+                    self.queue_position = 0
 
         return self.current
 
