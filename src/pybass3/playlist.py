@@ -83,8 +83,12 @@ class Playlist:
         else:
             song.free_stream()
             self.songs[song.id] = song
-            self.queue.append(song.id)
+            if add2queue is True:
+                self.queue.append(song.id)
+
             return song.id, song
+
+        return None, None
 
     def get_song_by_row(self, row_position:int) -> Song:
         try:
