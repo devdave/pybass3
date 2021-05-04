@@ -2,10 +2,12 @@
 import enum
 from pathlib import Path
 import random
+import logging
 
 from .bass_module import BassException
 from .song import Song
 
+log = logging.getLogger(__name__)
 
 class PlaylistState(enum.Enum):
     stopped = enum.auto()
@@ -59,11 +61,14 @@ class Playlist:
         self.fadein_song = None
         self.song_cls = song_cls
 
+        log.debug("Playlist Initialized")
+
     @property
     def current_song_id(self):
         return self.current.id
 
     def add_song(self, song_path):
+        log.debug("Playlist.add_song called with %s", song_path)
         song = self.song_cls(song_path)
         try:
             song.duration
@@ -93,6 +98,8 @@ class Playlist:
 
 
     def add_directory(self, dir_path: Path, recurse=True):
+        log.debug("Playlist.add_directory called with %s", dir_path)
+
         files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix in self.VALID_TYPES)
         dirs = (fdir for fdir in dir_path.iterdir() if fdir.is_dir())
 
