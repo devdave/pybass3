@@ -257,7 +257,7 @@ class Playlist:
 
         self.queue_position = 0
         try:
-            song = self.queue_position[self.queue_position]
+            song = self.queue[self.queue_position]
         except IndexError:
             return None
 
