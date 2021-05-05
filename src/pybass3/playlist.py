@@ -71,9 +71,6 @@ class Playlist:
 
         log.debug("Playlist Initialized")
 
-    @property
-    def current_song_id(self):
-        return self.current.id
 
     def add_song(self, song_path: pathlib.Path, add2queue=True):
         log.debug("Playlist.add_song called with %s", song_path)
