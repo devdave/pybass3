@@ -10,6 +10,7 @@ from argparse import ArgumentParser
 from pybass3 import Song
 import time
 
+
 def main(song_file):
     song = Song(song_file)
     song.play()
