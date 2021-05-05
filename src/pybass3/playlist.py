@@ -74,6 +74,8 @@ class Playlist:
     def free(self):
         del self.current
         del self.fadein_song
+        self.songs = []
+        self.queue = []
 
 
     def get_song_by_row(self, row_position:int) -> Song:
