@@ -28,7 +28,7 @@ class Song:
 
         if self.file_path.is_file() is False:
             raise ValueError(f"{file_path=} is not a valid file")
-                
+
 
         self._handle = None
         self._handle_length = None # Length in seconds
