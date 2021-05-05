@@ -154,7 +154,7 @@ class Playlist:
             self.play_first()
 
 
-    def set_sequential(self):
+    def set_sequential(self, restart_and_play = True):
         if self.current is not None:
             self.stop()
 
