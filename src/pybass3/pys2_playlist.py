@@ -75,12 +75,10 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Pys2Playlist.play_song %s", song_id)
 
         if self.fadein_song is not None:
-            self.fadein_song.free_stream()
-            self.fadein_song = None
+            del self.fadein_song
 
         if self.current is not None:
-            self.current.free_stream()
-            self.current = None
+            del self.current
 
         self.current = self.songs[song_id]
         self.current.play()
