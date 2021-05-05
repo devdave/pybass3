@@ -142,7 +142,7 @@ class PlaylistTableModel(QtCore.QAbstractTableModel):
             if col == 0:
                 return song.id
             elif col == 1:
-                song_name = song.file_path.name
+                song_name = song.title
                 return song_name
             elif col == 2:
                 return song.duration_time
