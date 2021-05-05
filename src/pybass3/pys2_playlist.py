@@ -87,6 +87,13 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         self.song_changed.emit(song_id)
         self.music_playing.emit(song_id)
 
+
+    def play_first(self) -> Pys2Song:
+        song = super(Pys2Playlist, self).play_first()
+        self.song_changed.emit(song.id)
+        self.music_playing.emit(song.id)
+        return song
+
     def stop(self):
         log.debug("Pys2Playlist.stop called")
 
