@@ -35,11 +35,14 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Initialized playlist: Precision is %s", tick_precision)
 
 
-
-
     def add_song(self, song_path) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
-        return super(Pys2Playlist, self).add_song(song_path)
+        song = super(Pys2Playlist, self).add_song(song_path)
+        if song is not None:
+            self.song_added.emit(song.id)
+
+        return song
+
     def get_indexof_song_by_id(self, song_id):
         """
             Find out where in the songs list a specific song is lcoated.   Only works reliably with
