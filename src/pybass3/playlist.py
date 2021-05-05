@@ -141,7 +141,7 @@ class Playlist:
     def fadein(self):
         self.fade_in = None
 
-    def set_randomize(self):
+    def set_randomize(self, restart_and_play=True):
         if self.current is not None:
             self.stop()
 
@@ -149,8 +149,9 @@ class Playlist:
         random.shuffle(ids)
         self.queue = ids
         self.mode = PlaylistMode.random
-        self.queue_position = 0
-        self.play_first()
+        if restart_and_play is True:
+            self.queue_position = 0
+            self.play_first()
 
 
     def set_sequential(self):
@@ -159,8 +160,9 @@ class Playlist:
 
         self.queue = list(self.songs.keys())
         self.mode = PlaylistMode.sequential
-        self.queue_position = 0
-        self.play_first()
+        if restart_and_play is True:
+            self.queue_position = 0
+            self.play_first()
 
 
     def loop_song(self):
