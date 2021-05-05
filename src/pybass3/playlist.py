@@ -72,6 +72,18 @@ class Playlist:
         log.debug("Playlist Initialized")
 
 
+
+    def get_song_by_row(self, row_position:int) -> Song:
+        try:
+            key = list(self.songs.keys())[row_position]
+        except IndexError:
+            return None
+
+        return self.songs[key]
+
+    def get_song_by_id(self, song_id) -> Song:
+        return self.songs.get(song_id, None)
+
     def add_song(self, song_path: pathlib.Path, add2queue=True):
         log.debug("Playlist.add_song called with %s", song_path)
         song = self.song_cls(song_path)
@@ -93,18 +105,6 @@ class Playlist:
             return song.id, song
 
         return None, None
-
-    def get_song_by_row(self, row_position:int) -> Song:
-        try:
-            key = list(self.songs.keys())[row_position]
-        except IndexError:
-            return None
-
-        return self.songs[key]
-
-    def get_song_by_id(self, song_id) -> Song:
-        return self.songs.get(song_id, None)
-
 
     def add_directory(self, dir_path: Path, recurse=True):
         log.debug("Playlist.add_directory called with %s", dir_path)
