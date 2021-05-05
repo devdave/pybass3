@@ -15,6 +15,7 @@ class Song:
     _handle: HANDLE
     _handle_length: float # Seconds
     _handle_position: float # Seconds
+    file_path: Path
 
     def __init__(self, file_path: T.Union[str, Path]):
         super(Song, self).__init__()
