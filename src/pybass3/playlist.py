@@ -296,6 +296,8 @@ class Playlist:
 
         del self.fadein_song
         del self.current
+        self.current = song
+        self.play()
 
 
     def stop(self):
