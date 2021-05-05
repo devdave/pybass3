@@ -121,6 +121,7 @@ class Playlist:
             try:
                 song = self.add_song(song_path)
                 if song is not None:
+                    song_ids.append(song.id)
             except TypeError:
                 pass
 
