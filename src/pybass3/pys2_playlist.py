@@ -40,6 +40,18 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     def add_song(self, song_path) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
         return super(Pys2Playlist, self).add_song(song_path)
+    def get_indexof_song_by_id(self, song_id):
+        """
+            Find out where in the songs list a specific song is lcoated.   Only works reliably with
+            Python >= 3.7 where dict is naturally ordered.
+
+            Drastically slower but works for now.
+
+        :param song_id:
+        :return:
+        """
+        songs = list(self.songs.keys())
+        return songs.index(song_id)
 
     def play(self):
         log.debug("Pys2Playlist.play self.current is %s", self.current)
