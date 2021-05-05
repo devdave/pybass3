@@ -30,7 +30,11 @@ def main(dir_path):
     play_indefinitely = True
     while play_indefinitely:
         try:
-            print(playlist.current.file_path.name, int(playlist.current_song.position), int(playlist.current_song.duration))
+            print(
+                playlist.current.file_path.name,
+                playlist.current.position_time,
+                playlist.current.duration_time
+            )
             playlist.tick()
             key = kbfunc()
             if key:
