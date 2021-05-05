@@ -264,7 +264,7 @@ class Playlist:
         elif self.current is not None and (self.current.is_paused or self.current.is_stopped):
             self.current.play()
 
-    def play_first(self):
+    def play_first(self) -> Song:
         del self.fadein_song
 
         self.queue_position = 0
