@@ -97,8 +97,9 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
     def play_first(self) -> Pys2Song:
         song = super(Pys2Playlist, self).play_first()
-        self.song_changed.emit(song.id)
-        self.music_playing.emit(song.id)
+        if song is not None:
+            self.song_changed.emit(song.id)
+            self.music_playing.emit(song.id)
         return song
 
     def stop(self):
