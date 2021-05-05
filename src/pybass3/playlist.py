@@ -96,7 +96,7 @@ class Playlist:
             if bexc.code == 41:
                 # bad formatted song
                 log.error("Unsupported file format: %s", song_path)
-                return None, None
+                return None
             log.exception("Failed to properly load: %s", song_path)
 
         else:
@@ -105,9 +105,9 @@ class Playlist:
             if add2queue is True:
                 self.queue.append(song.id)
 
-            return song.id, song
+            return song
 
-        return None, None
+        return None
 
     def add_directory(self, dir_path: Path, recurse=True):
         log.debug("Playlist.add_directory called with %s", dir_path)
@@ -119,8 +119,8 @@ class Playlist:
 
         for song_path in files:
             try:
-                song_id, song = self.add_song(song_path)
-                song_ids.append(song_id)
+                song = self.add_song(song_path)
+                if song is not None:
             except TypeError:
                 pass
 
