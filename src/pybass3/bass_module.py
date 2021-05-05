@@ -36,6 +36,8 @@ BASS_Init = func_type(
     ctypes.c_ulong,
     ctypes.c_void_p)(('BASS_Init', bass_module))
 
+BASS_IsStarted = func_type(ctypes.c_bool)("BASS_IsStarted", bass_module)
+
 BASS_Free = func_type(ctypes.c_bool)(('BASS_Free', bass_module))
 
 BASS_ErrorGetCode = func_type(ctypes.c_int)(('BASS_ErrorGetCode', bass_module))
@@ -59,6 +61,11 @@ BASS_GetDevice = func_type(ctypes.c_ulong)(('BASS_GetDevice', bass_module))
 BASS_SetDevice = func_type(ctypes.c_bool, ctypes.c_ulong)(('BASS_SetDevice', bass_module))
 
 BASS_GetDeviceInfo = func_type(ctypes.c_bool, ctypes.c_ulong, ctypes.POINTER(BASS_DEVICEINFO))(('BASS_GetDeviceInfo', bass_module))
+
+# Master play controls
+BASS_Pause =  func_type(ctypes.c_bool)("BASS_Pause", bass_module)
+BASS_Start = func_type(ctypes.c_bool)("BASS_Start", bass_module)
+BASS_Stop = func_type(ctypes.c_bool)("BASS_Stop", bass_module)
 
 
 
