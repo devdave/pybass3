@@ -4,6 +4,7 @@
 
 """
 import logging
+import pathlib
 
 from PySide2 import QtCore
 
@@ -15,6 +16,12 @@ from .playlist import Playlist, PlaylistMode
 log = logging.getLogger(__name__)
 
 class Pys2Playlist(QtCore.QObject, Playlist):
+    """
+    Extension to the Playlist class which fires QT5/Pyside2 signals
+    for when songs are added (group or individual), when the song changes, as well as reports when
+    the state (play, pause, stop) occurs.
+
+    """
     song_added = QtCore.Signal(str)  # Song ID, Qt DOES NOT like when I try to pass the Song object
     songs_added = QtCore.Signal(list) # list of Song ID's
     song_changed = QtCore.Signal(str)  # Song ID
