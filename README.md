@@ -1,5 +1,7 @@
 # PyBASS wrapper
 
+[![Downloads](https://pepy.tech/badge/pybass3)](https://pepy.tech/project/pybass3)
+
 
 LICENSING
 ---------
@@ -81,7 +83,7 @@ def main(dir_path):
     play_indefinitely = True
     while play_indefinitely:
         try:
-            print(playlist.current.file_path.name, playlist.current_song.position, playlist.current_song.duration)
+            print(playlist.current.file_path.name, playlist.current.position, playlist.current.duration)
             playlist.tick()
             key = kbfunc()
             if key:                
