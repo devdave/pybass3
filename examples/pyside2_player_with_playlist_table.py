@@ -203,6 +203,8 @@ class PlayerController(QtCore.QObject):
         self.playlist.ticked.connect(self.on_pl_tick)
         self.playlist.song_changed.connect(self.on_song_changed)
 
+        # I could hide a lot of view logic as a PlayerWindow set model method
+        # but I am tired of how complicated this has gotten
         self.view.pl_table.setModel(self.plt_model)
         self.view.pl_table.hideColumn(0)
         self.view.pl_table.verticalHeader().hide()

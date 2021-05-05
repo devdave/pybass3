@@ -24,3 +24,5 @@ next and transition logic.
 * Multiple fixes to Pys2Playlist so that it behaves
 correctly.
   
+* Finished a working example of using a QTableView with Pys2Playlist.   It's amazing how much more scaffolding and
+supporting logic goes into wiring this up.
