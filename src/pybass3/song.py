@@ -23,7 +23,12 @@ class Song:
 
         self._id = uuid4().hex
         self.file_path = Path(file_path)
-        assert self.file_path.exists() and self.file_path.is_file(), f"{self.file_path} doesn't exist or is not a file"
+        if self.file_path.exists() is False:
+            raise ValueError(f"{file_path} doesn't exist")
+
+        if self.file_path.is_file() is False:
+            raise ValueError(f"{file_path=} is not a valid file")
+                
 
         self._handle = None
         self._handle_length = None # Length in seconds
