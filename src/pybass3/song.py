@@ -1,13 +1,14 @@
 from pathlib import Path
 import typing as T
 from uuid import uuid4
-
+import logging
 
 from .datatypes import HANDLE
 from .bass_module import Bass
 from .bass_channel import BassChannel
 from .bass_stream import BassStream
 
+log = logging.getLogger(__name__)
 
 class Song:
 
