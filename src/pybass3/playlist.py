@@ -95,9 +95,9 @@ class Playlist:
         except BassException as bexc:
             if bexc.code == 41:
                 # bad formatted song
-                print(bexc)
-                return None
-            print("Failed to load: ", song_path)
+                log.error("Unsupported file format: %s", song_path)
+                return None, None
+            log.exception("Failed to properly load: %s", song_path)
 
         else:
             song.free_stream()
