@@ -104,6 +104,9 @@ class PlayerWindow(QtWidgets.QMainWindow):
 
         vbox.addLayout(queue_box)
 
+        self.pl_table = QtWidgets.QTableView()
+        self.pl_table.setColumnHidden(0, True)
+        vbox.addWidget(self.pl_table)
 
         frame.setLayout(vbox)
         self.setCentralWidget(frame)
@@ -114,7 +117,10 @@ class PlayerWindow(QtWidgets.QMainWindow):
 class PlaylistTableModel(QtCore.QAbstractTableModel):
 
     def __init__(self, playlist):
+        super(PlaylistTableModel, self).__init__()
         self.playlist = playlist
+
+        self.playlist.song_added.connect(self.song_added)
 
     def rowCount(self, parent:QtCore.QModelIndex = ...) -> int:
         return len(self.playlist)
@@ -146,6 +152,15 @@ class PlaylistTableModel(QtCore.QAbstractTableModel):
             elif col == 2:
                 return song.duration_time
 
+    def song_added(self, song_id: str):
+
+        index = self.playlist.get_indexof_song_by_id(song_id)
+        index_model = QtCore.QModelIndex()
+        self.beginInsertRows(index_model, index, index+1)
+        self.endInsertRows()
+
+
+
 
 
 
@@ -156,6 +171,7 @@ class PlayerController(QtCore.QObject):
         super(PlayerController, self).__init__()
         self.view = PlayerWindow()
         self.playlist = Pys2Playlist()
+        self.plt_model = PlaylistTableModel(self.playlist)
 
         self.seek_bar_pressed = False
 
@@ -183,9 +199,15 @@ class PlayerController(QtCore.QObject):
         self.view.randomize_btn.clicked.connect(self.on_randomize_click)
         self.view.sequential_btn.clicked.connect(self.on_sequential_click)
 
-        #Playlist connections
+        # Playlist connections
         self.playlist.ticked.connect(self.on_pl_tick)
         self.playlist.song_changed.connect(self.on_song_changed)
+
+        self.view.pl_table.setModel(self.plt_model)
+        self.view.pl_table.hideColumn(0)
+        self.view.pl_table.verticalHeader().hide()
+        self.view.pl_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+
 
         log.debug("PlayerController connected to view")
 
@@ -233,6 +255,11 @@ class PlayerController(QtCore.QObject):
                       )
             self.view.seek_bar.setRange(0, song.duration_bytes)
             self.view.seek_bar.setValue(song.position_bytes)
+
+        song_index = self.playlist.get_indexof_song_by_id(song_id)
+        self.view.pl_table.selectRow(song_index)
+        self.view.pl_table.resizeColumnsToContents()
+
 
     def do_state_update(self):
         # Add 1 to queue position because it starts counting from 0
