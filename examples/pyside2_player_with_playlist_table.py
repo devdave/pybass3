@@ -209,6 +209,8 @@ class PlayerController(QtCore.QObject):
         self.view.pl_table.hideColumn(0)
         self.view.pl_table.verticalHeader().hide()
         self.view.pl_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.view.pl_table.doubleClicked.connect(self.on_songs_table_row_clicked)
+
 
 
         log.debug("PlayerController connected to view")
@@ -351,6 +353,10 @@ class PlayerController(QtCore.QObject):
             self.playlist.queue_position = 0
             self.playlist.play()
 
+    def on_songs_table_row_clicked(self):
+        index = self.view.pl_table.selectedIndexes()[0] # type: QtCore.QModelIndex
+        self.playlist.play_song_by_index(index.row())
+        log.debug("%s was clicked", index)
 
 def setup_logging():
 
