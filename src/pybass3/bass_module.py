@@ -279,3 +279,34 @@ class Bass:
             cls.RaiseError()
 
         return bd
+
+    @classmethod
+    def Pause(cls) -> bool:
+        """
+        Stops the output, pausing all musics/samples/streams on it.
+
+        :return:
+        """
+
+        return BASS_Pause()
+
+    @classmethod
+    def Start(cls) -> bool:
+        """
+        Starts (or resumes) the output.
+
+        :return:
+        """
+        return BASS_Start()
+
+    @classmethod
+    def Stop(cls) -> bool:
+        """
+        Stops the output, stopping all musics/samples/streams on it.
+
+        :return:
+        """
+        return BASS_Stop()
+
+
+
