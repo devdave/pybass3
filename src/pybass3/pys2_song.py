@@ -54,3 +54,16 @@ class Pys2Song(QtCore.QObject, Song):
     def stop(self):
         super(Pys2Song, self).stop()
         self.timer.stop()
+
+    @property
+    def title(self):
+        """
+            Return a semi-useful song title
+
+
+        :return:
+        """
+        # Strip off the file suffix
+        name, _ = self.file_path.name.rsplit(".", 1)
+        parent_name = self.file_path.parent.name
+        return f"{parent_name} - {name}"
