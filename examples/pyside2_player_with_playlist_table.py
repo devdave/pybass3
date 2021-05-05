@@ -147,6 +147,10 @@ class PlaylistTableModel(QtCore.QAbstractTableModel):
             elif col == 2:
                 return song.duration_time
 
+        elif role == Qt.ToolTipRole:
+            if col == 1:
+                return song.file_path.as_posix()
+
     def song_added(self, song_id: str):
 
         index = self.playlist.get_indexof_song_by_id(song_id)
