@@ -151,7 +151,7 @@ class PlaylistTableModel(QtCore.QAbstractTableModel):
 
         index = self.playlist.get_indexof_song_by_id(song_id)
         index_model = QtCore.QModelIndex()
-        self.beginInsertRows(index_model, index, index + 1)
+        self.beginInsertRows(index_model, index, index)
         self.endInsertRows()
 
 
