@@ -276,7 +276,8 @@ class Playlist:
             raise RuntimeError("Song queue is corrupt/out of sync with song list")
 
         self.current.play()
-        return song
+
+        return self.current
 
     def play_song_by_id(self, song_id):
         song = self.songs.get(song_id, None)
