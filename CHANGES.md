@@ -26,3 +26,6 @@ correctly.
   
 * Finished a working example of using a QTableView with Pys2Playlist.   It's amazing how much more scaffolding and
 supporting logic goes into wiring this up.
+  
+* current_song property/variable is dead & gone, the correct property is now `current` which handles memory/handle cleanup
+and keeps things kosher.
