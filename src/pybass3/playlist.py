@@ -356,8 +356,17 @@ class Playlist:
         if self.fadein_song is not None:
             self.current = self.fadein_song
         else:
-            song_id = self.queue[self.queue_position]
-            self.current = self.songs[song_id]
+            try:
+                song_id = self.queue[self.queue_position]
+
+            except IndexError:
+                log.error("No song at queue position %s", self.queue_position)
+                return None
+
+            try:
+                self.current = self.songs[song_id]
+            except IndexError:
+                log.exception("Playlist corrupt!  No song_id %s exists @ queue position %s", song_id, self.queue_position)
 
         if self.current is not None and self.current.is_playing is False:
             self.current.play()
