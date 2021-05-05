@@ -71,6 +71,9 @@ class Playlist:
 
         log.debug("Playlist Initialized")
 
+    def free(self):
+        del self.current
+        del self.fadein_song
 
 
     def get_song_by_row(self, row_position:int) -> Song:
