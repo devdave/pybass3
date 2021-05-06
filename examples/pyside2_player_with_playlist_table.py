@@ -167,6 +167,8 @@ class PlayerController(QtCore.QObject):
         self.playlist = Pys2Playlist()
         self.plt_model = PlaylistTableModel(self.playlist)
 
+        self.playlist.fade_in = 5
+
         self.seek_bar_pressed = False
 
         log.debug("PlayerController initialized")
