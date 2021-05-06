@@ -270,6 +270,9 @@ class Playlist:
 
         elif self.current is not None and (self.current.is_paused or self.current.is_stopped):
             self.current.play()
+        elif self.current is not None and self.current.is_playing:
+            self.restart()
+
 
     def play_first(self) -> Song:
         del self.fadein_song
