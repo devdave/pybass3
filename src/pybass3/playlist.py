@@ -65,7 +65,7 @@ class Playlist:
         self.queue_position = 0
         self._current_song = None
 
-        self.fade_in = None
+        self.fade_in = 0
         self._fadein_song = None
         self.song_cls = song_cls
 
@@ -145,7 +145,7 @@ class Playlist:
 
     @fadein.deleter
     def fadein(self):
-        self.fade_in = None
+        self.fade_in = 0
 
     def set_randomize(self, restart_and_play=True):
         if self.current is not None:
@@ -423,7 +423,7 @@ class Playlist:
         if self.play_mode == PlaylistMode.loop_single and remaining == 0:
             self.current.move2position_seconds(0)
 
-        elif self.fade_in is not None and remaining_seconds <= self.fade_in:
+        elif self.fadein > 0 and remaining_seconds <= self.fade_in:
             if self.fadein_song is not None and remaining <= 0:
                 self.current = self.fadein_song
                 self.fadein_song = None
