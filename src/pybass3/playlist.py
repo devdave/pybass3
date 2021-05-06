@@ -205,14 +205,16 @@ class Playlist:
 
     @fadein_song.setter
     def fadein_song(self, new_song):
-        if self._fadein_song is not None:
-            self._fadein_song.freestream()
+        if self._fadein_song is not None and self._fadein_song != self.current:
+            self._fadein_song.free_stream()
 
         self._fadein_song = new_song
 
     @fadein_song.deleter
     def fadein_song(self):
-        if self._fadein_song is not None:
+        # if there is a fade in song and it hasn't been assigned to current
+        if self._fadein_song is not None and self._fadein_song != self.current:
+            # kill it.
             self._fadein_song.free_stream()
             self._fadein_song = None
 
@@ -431,7 +433,7 @@ class Playlist:
                 self.current = self.fadein_song
                 self.fadein_song = None
                 self.queue_position += 1
-            elif self.upcoming is not None:
+            elif self.fadein_song is None and self.upcoming is not None:
                 self.fadein_song = self.upcoming
                 self.fadein_song.play()
 
