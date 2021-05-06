@@ -47,8 +47,8 @@ class Playlist:
 
     queue_position: int  # Where is the playlist in the current queue
     _current_song: Song # What is currently playing
-    _fadein_song: Song # if fade_in is not None, this is the next song to play
-    fade_in: int # How soon should the next song start playing, None if lock step
+    _fade_in_song: Song # if fade_in is not None, this is the next song to play
+    _fade_in: int # How soon should the next song start playing, None if lock step
     song_cls: Song # What is the container for a song (eg Song or QtSong)
 
 
@@ -65,8 +65,8 @@ class Playlist:
         self.queue_position = 0
         self._current_song = None
 
-        self.fade_in = 0
-        self._fadein_song = None
+        self._fade_in = 0
+        self._fade_in_song = None
         self.song_cls = song_cls
 
         log.debug("Playlist Initialized")
@@ -139,16 +139,16 @@ class Playlist:
         return song_ids
 
     @property
-    def fadein(self):
-        return self.fade_in
+    def fade_in(self):
+        return self._fade_in
 
-    @fadein.setter
-    def fadein(self, value):
-        self.fade_in = value
+    @fade_in.setter
+    def fade_in(self, value):
+        self._fade_in = value
 
-    @fadein.deleter
-    def fadein(self):
-        self.fade_in = 0
+    @fade_in.deleter
+    def fade_in(self):
+        self._fade_in = 0
 
     def set_randomize(self, restart_and_play=True):
         if self.current is not None:
@@ -201,22 +201,22 @@ class Playlist:
 
     @property
     def fadein_song(self):
-        return self._fadein_song
+        return self._fade_in_song
 
     @fadein_song.setter
     def fadein_song(self, new_song):
-        if self._fadein_song is not None and self._fadein_song != self.current:
-            self._fadein_song.free_stream()
+        if self._fade_in_song is not None and self._fade_in_song != self.current:
+            self._fade_in_song.free_stream()
 
-        self._fadein_song = new_song
+        self._fade_in_song = new_song
 
     @fadein_song.deleter
     def fadein_song(self):
         # if there is a fade in song and it hasn't been assigned to current
-        if self._fadein_song is not None and self._fadein_song != self.current:
+        if self._fade_in_song is not None and self._fade_in_song != self.current:
             # kill it.
-            self._fadein_song.free_stream()
-            self._fadein_song = None
+            self._fade_in_song.free_stream()
+            self._fade_in_song = None
 
 
 
@@ -428,7 +428,7 @@ class Playlist:
         if self.play_mode == PlaylistMode.loop_single and remaining == 0:
             self.current.move2position_seconds(0)
 
-        elif self.fadein > 0 and remaining_seconds <= self.fade_in:
+        elif self.fade_in > 0 and remaining_seconds <= self._fade_in:
             if self.fadein_song is not None and remaining <= 0:
                 self.current = self.fadein_song
                 self.fadein_song = None
