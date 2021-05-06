@@ -77,6 +77,9 @@ class Playlist:
         self.songs = []
         self.queue = []
 
+    def clear(self):
+        self.free()
+
 
     def get_song_by_row(self, row_position:int) -> Song:
         try:
