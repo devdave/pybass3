@@ -184,3 +184,9 @@ class Song:
 
     def __hash__(self):
         return hash(self.file_path)
+
+    def __repr__(self):
+        return f"<Song {self.file_path=!r}>"
+
+    def __str__(self):
+        return f"<Song {self.file_path=!r}>"
