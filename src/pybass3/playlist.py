@@ -158,8 +158,8 @@ class Playlist:
         random.shuffle(ids)
         self.queue = ids
         self.mode = PlaylistMode.random
+        self.queue_position = 0
         if restart_and_play is True:
-            self.queue_position = 0
             self.play_first()
 
 
@@ -169,8 +169,8 @@ class Playlist:
 
         self.queue = list(self.songs.keys())
         self.mode = PlaylistMode.sequential
+        self.queue_position = 0
         if restart_and_play is True:
-            self.queue_position = 0
             self.play_first()
 
 
