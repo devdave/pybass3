@@ -41,7 +41,7 @@ class Pys2Song(QtCore.QObject, Song):
          this entire thing crash and burn than create a growing memory leak.
         Returns: None
         """
-        self.free_stream()
+        self.free_stream(direct_stop=True)
 
     def play(self):
         super(Pys2Song, self).play()

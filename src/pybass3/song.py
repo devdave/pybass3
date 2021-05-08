@@ -50,17 +50,26 @@ class Song:
         self._handle = BassStream.CreateFile(False, bytes(self.file_path))
         self._handle_length = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
 
-    def free_stream(self) -> None:
+    def free_stream(self, direct_stop=False) -> None:
         """
-            Stop this music file from playing and frees its file handle from the BASS library.
+        Stop this music file from playing and frees its file handle from the BASS library.
 
-            :raises
+        Args:
+            direct_stop:  Should I call the underlying BassChannel Stop method instead of indirectly
+
+        raises:
             BassException - If there is an issue releasing the file handle (eg it never existed).
+
+        Returns:
+
         """
         if self._handle is not None:
 
             if self.is_playing or self.is_paused:
-                self.stop()
+                if direct_stop is True and self._handle is not None:
+                    BassChannel.Stop(self._handle)
+                else:
+                    self.stop()
 
             retval = BassStream.Free(self._handle)
             if retval is not True:
