@@ -301,13 +301,15 @@ class Playlist:
         self.current = song
         self.play()
 
-    def play_song_by_index(self, song_index):
+    def play_song_by_index(self, song_index) -> Song:
         song = self.get_song_by_row(song_index)
 
         del self.fadein_song
         del self.current
         self.current = song
         self.play()
+
+        return song
 
 
     def stop(self):
