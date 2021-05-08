@@ -365,8 +365,7 @@ class Playlist:
 
         # stop the music
         if self.current is not None:
-            self.current.stop()
-            self.current.free_stream()
+            del self.current
 
 
         if self.fadein_song is not None:
