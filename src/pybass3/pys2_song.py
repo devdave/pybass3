@@ -60,10 +60,20 @@ class Pys2Song(QtCore.QObject, Song):
         """
             Return a semi-useful song title
 
-
         :return:
         """
-        # Strip off the file suffix
-        name, _ = self.file_path.name.rsplit(".", 1)
-        parent_name = self.file_path.parent.name
-        return f"{parent_name} - {name}"
+        tag_title = self.tags['title']
+        tag_artist = self.tags['artist']
+
+        if None not in [tag_title, tag_artist]:
+            return f"{tag_artist} - {tag_title}"
+
+        song_title = ""
+        if tag_title is None:
+            song_title, _ = self.file_path.name.rsplit(".", 1)
+
+        song_artist = ""
+        if tag_artist is None:
+            song_artist = self.file_path.parent.name
+
+        return f"{song_artist} - {song_title}"
