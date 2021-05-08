@@ -43,7 +43,7 @@ BASS_ChannelSeconds2Bytes = func_type(
 BASS_ChannelGetLength = func_type(QWORD, ctypes.c_ulong, ctypes.c_ulong)(('BASS_ChannelGetLength', bass_module))
 
 BASS_ChannelGetTagsID3v1 = func_type(
-    ID3v1,
+    ctypes.POINTER(ID3v1),
     HANDLE,
     ctypes.c_ulong)(("BASS_ChannelGetTags", bass_module))
 
@@ -154,4 +154,4 @@ class BassChannel:
 
     @classmethod
     def GetID3v1Tags(cls, stream_handle: HANDLE):
-        return BASS_ChannelGetTagsID3v1(stream_handle, )
+        return BASS_ChannelGetTagsID3v1(stream_handle, channel.TAG_ID3)
