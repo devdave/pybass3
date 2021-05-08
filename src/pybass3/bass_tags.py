@@ -2,7 +2,7 @@ import ctypes
 import platform
 import pathlib
 
-from datatypes import HANDLE
+from .datatypes import HANDLE
 
 HERE = pathlib.Path(__file__).parent
 TAG_FILE = HERE / "vendor" / "tags"

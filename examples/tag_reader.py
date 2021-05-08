@@ -1,9 +1,11 @@
 import argparse
 from pathlib import Path
+import pprint
 
 from pybass3 import Bass, BassChannel, BassStream
 from pybass3.structs.id import ID3v1
 from pybass3.codes.tag import ID3
+from pybass3.bass_tags import BassTags
 
 
 def b2u(val):
@@ -17,8 +19,17 @@ def main(song_file):
     song_posix = bytes(song_file)
     handle = BassStream.CreateFile(False, song_posix)
     tag_info = BassChannel.GetID3v1Tags(handle)
+
+    print("ID3 data")
     print(f"{tag_info.contents.artist} - {tag_info.contents.album}")
     print(f"{tag_info.contents.title}")
+
+    tags = BassTags.GetDefaultTags(handle)
+    print("BASS TAGS library results")
+
+    pprint.pprint(tags)
+
+    BassStream.Free(handle)
 
 
 
