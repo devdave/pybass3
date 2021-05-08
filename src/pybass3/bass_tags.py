@@ -33,7 +33,9 @@ class BassTags:
     @classmethod
     def GetDefaultTags(cls, handle):
         """
-            TODO I have no idea what this format does
+            See vendor/tags-readme.txt for what the various codes in the fmt
+            string do.
+
         :param handle:
         :return:
         """
