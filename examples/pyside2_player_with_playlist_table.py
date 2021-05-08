@@ -31,15 +31,7 @@ class PlayerWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super(PlayerWindow, self).__init__(*args, **kwargs)
-        # self.pl_position = None
-        # self.song_title = None
-        # self.song_position = None
-        # self.song_duration = None
-        # self.seek_bar = None
-        # self.prv_btn = self.ply_btn = self.pause_btn = self.stop_btn = self.next_btn = None
-        # self.add_file_btn = self.add_dir_btn = None
-        # self.randomize_btn = self.sequential_btn = None
-        # self.pl_table = None
+
         self.setupUI()
 
         log.debug("Initialized PlayerWindow")
