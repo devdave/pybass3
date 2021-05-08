@@ -52,7 +52,17 @@ class BassTags:
         ]
         fmt_str = divider.join(fmt_list)
         retval = cls.GetTags(handle, fmt_str)
+        if retval and len(retval) > 0:
+            for element in retval.split(divider):
+                name, value = element.split(b"=", 1) # type: (bytes, bytes,)
+                name = name.decode("utf-8").strip()
+                value = value.decode("utf-8").strip() if len(value) > 0 else None
+                result[name] = value
+
         return result
+
+
+
 
 
     @classmethod
