@@ -122,14 +122,14 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     def previous(self):
         log.debug("Pys2Playlist.previous")
         result = super(Pys2Playlist, self).previous()
-        log.debug("Pys2Playlist.previous changed to %s", result)
+        log.debug("Pys2Playlist.previous changed to %r", result)
         if result is not None:
             self.song_changed.emit(result.id)
         
     def next(self):
         log.debug("Pys2Playlist.next")
         result = super(Pys2Playlist, self).next()
-        log.debug("Next song is %s", result)
+        log.debug("Next song is %r", result)
         if result is not None:
             self.song_changed.emit(result.id)
 
