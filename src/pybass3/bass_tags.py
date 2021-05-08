@@ -19,7 +19,8 @@ else:
 TAG_VERSION = 18
 
 TAGS_GetLastErrorDesc = func_type(ctypes.c_char_p)(('TAGS_GetLastErrorDesc', tags_module))
-TAGS_Read = func_type(ctypes.c_char_p, ctypes.c_ulong, ctypes.c_char_p)(('TAGS_Read', tags_module))
+TAGS_Read = func_type(ctypes.c_char_p,
+                      ctypes.c_ulong, ctypes.c_char_p)(('TAGS_Read', tags_module))
 TAGS_GetVersion = func_type(ctypes.c_ulong)(('TAGS_GetVersion', tags_module))
 
 
