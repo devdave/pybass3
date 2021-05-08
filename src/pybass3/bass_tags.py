@@ -1,6 +1,7 @@
 import ctypes
 import platform
 import pathlib
+from collections import defaultdict
 
 from .datatypes import HANDLE
 
@@ -40,7 +41,7 @@ class BassTags:
         :return:
         """
         divider = b"|//||"
-        result = dict()
+        result = defaultdict(None)
         fmt_list = [
             b'track=%IFV1(%ITRM(%TRCK),%ITRM(%TRCK))',
             b'artist=%IFV1(%ITRM(%ARTI),%ICAP(%ITRM(%ARTI)))',
