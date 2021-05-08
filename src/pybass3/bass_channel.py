@@ -3,6 +3,7 @@ import ctypes
 from .bass_module import func_type, bass_module
 from .datatypes import HANDLE, QWORD
 from .codes import channel
+from .structs.id import ID3v1
 
 BASS_ChannelPlay = func_type(
     ctypes.c_bool,
@@ -41,6 +42,10 @@ BASS_ChannelSeconds2Bytes = func_type(
 
 BASS_ChannelGetLength = func_type(QWORD, ctypes.c_ulong, ctypes.c_ulong)(('BASS_ChannelGetLength', bass_module))
 
+BASS_ChannelGetTagsID3v1 = func_type(
+    ID3v1,
+    HANDLE,
+    ctypes.c_ulong)(("BASS_ChannelGetTags", bass_module))
 
 
 class BassChannel:
@@ -146,3 +151,7 @@ class BassChannel:
     @classmethod
     def GetLengthBytes(cls, stream_handle: HANDLE):
         return BASS_ChannelGetLength(stream_handle, channel.POS_BYTE)
+
+    @classmethod
+    def GetID3v1Tags(cls, stream_handle: HANDLE):
+        return BASS_ChannelGetTagsID3v1(stream_handle, )
