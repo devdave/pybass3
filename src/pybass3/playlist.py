@@ -345,6 +345,7 @@ class Playlist:
         try:
             return self._next()
         except BassException:
+            # attempt to advance the song by one to get past an error
             if self.error_mode == PlaylistMode.progress_on_error:
                 self.queue_position += 1
                 if self.queue_position > len(self.queue) and self.mode == PlaylistMode.loop_all:
