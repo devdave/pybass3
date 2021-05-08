@@ -94,6 +94,15 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         self.song_changed.emit(song_id)
         self.music_playing.emit(song_id)
 
+    def play_song_by_index(self, song_index) -> Pys2Song:
+
+        song = super(Pys2Playlist, self).play_song_by_index(song_index)
+
+        self.song_changed.emit(song.id)
+        self.music_playing.emit(song.id)
+
+        return song
+
 
     def play_first(self) -> Pys2Song:
         song = super(Pys2Playlist, self).play_first()
