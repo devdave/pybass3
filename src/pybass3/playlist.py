@@ -289,7 +289,7 @@ class Playlist:
 
         return self.current
 
-    def play_song_by_id(self, song_id):
+    def play_song_by_id(self, song_id) -> Song:
         song = self.songs.get(song_id, None)
         if song is None:
             #TODO raise an error here?
@@ -300,6 +300,8 @@ class Playlist:
 
         self.current = song
         self.play()
+
+        return song
 
     def play_song_by_index(self, song_index) -> Song:
         song = self.get_song_by_row(song_index)
