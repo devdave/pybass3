@@ -39,8 +39,20 @@ class BassTags:
         :param handle:
         :return:
         """
-        fmt_str = '%IFV1(%ITRM(%TRCK),%ITRM(%TRCK). )%IFV2(%ITRM(%ARTI),%ICAP(%ITRM(%ARTI)),no artist) - %IFV2(%ITRM(%TITL),%ICAP(%ITRM(%TITL)),no title)%IFV1(%ITRM(%ALBM), - %IUPC(%ITRM(%ALBM)))%IFV1(%YEAR, %(%YEAR%))%IFV1(%ITRM(%GNRE), {%ITRM(%GNRE)})%IFV1(%ITRM(%CMNT), [%ITRM(%CMNT)])'
-        return cls.GetTags(handle, fmt_str)
+        divider = b"|//||"
+        result = dict()
+        fmt_list = [
+            b'track=%IFV1(%ITRM(%TRCK),%ITRM(%TRCK))',
+            b'artist=%IFV1(%ITRM(%ARTI),%ICAP(%ITRM(%ARTI)))',
+            b'title=%IFV1(%ITRM(%TITL),%ICAP(%ITRM(%TITL)))',
+            b'album=%IFV1(%ITRM(%ALBM),%IUPC(%ITRM(%ALBM)))',
+            b'year=%IFV1(%YEAR, %YEAR)',
+            b'genre=%IFV1(%ITRM(%GNRE),%ITRM(%GNRE))',
+            b'comment=%IFV1(%ITRM(%CMNT),[%ITRM(%CMNT)])'
+        ]
+        fmt_str = divider.join(fmt_list)
+        retval = cls.GetTags(handle, fmt_str)
+        return result
 
 
     @classmethod
