@@ -9,10 +9,11 @@ TAG_FILE = HERE / "vendor" / "tags"
 
 
 if platform.system().lower() == "windows":
-    tags_module = ctypes.WinDLL(TAG_FILE)
+    tags_module = ctypes.WinDLL(TAG_FILE.as_posix())
     func_type = ctypes.WINFUNCTYPE
 else:
-    tags_module = ctypes.CDLL(TAG_FILE)
+    raise NotImplementedError("Linux support isn't available")
+    tags_module = ctypes.CDLL("./tags.so")
     func_type = ctypes.CFUNCTYPE
 
 TAG_VERSION = 18
