@@ -2,13 +2,17 @@ from pathlib import Path
 import typing as T
 from uuid import uuid4
 import logging
+from collections import defaultdict
 
 from .datatypes import HANDLE
 from .bass_module import Bass
 from .bass_channel import BassChannel
 from .bass_stream import BassStream
+from .bass_tags import BassTags
 
 log = logging.getLogger(__name__)
+
+
 
 class Song:
 
@@ -16,6 +20,7 @@ class Song:
     _handle_length: float # Seconds
     _handle_position: float # Seconds
     file_path: Path
+    tags: dict
 
     def __init__(self, file_path: T.Union[str, Path]):
         super(Song, self).__init__()
@@ -33,6 +38,7 @@ class Song:
         self._handle = None
         self._handle_length = None # Length in seconds
         self._handle_position = 0 # Current position in the song, in seconds
+        self.tags = defaultdict(None)
 
     def __del__(self):
         """
@@ -49,6 +55,7 @@ class Song:
     def _create_stream(self):
         self._handle = BassStream.CreateFile(False, bytes(self.file_path))
         self._handle_length = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
+        self.tags = BassTags.GetDefaultTags(self._handle)
 
     def free_stream(self, direct_stop=False) -> None:
         """
