@@ -38,7 +38,7 @@ class Song:
         self._handle = None
         self._handle_length = None # Length in seconds
         self._handle_position = 0 # Current position in the song, in seconds
-        self.tags = defaultdict(None)
+        self.tags = defaultdict(lambda : None)
 
     def __del__(self):
         """
