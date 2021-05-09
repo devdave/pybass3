@@ -41,7 +41,7 @@ class BassTags:
         :return:
         """
         divider = b"|//||"
-        result = defaultdict(None)
+        result = defaultdict(lambda : None)
         fmt_list = [
             b'track=%IFV1(%ITRM(%TRCK),%ITRM(%TRCK))',
             b'artist=%IFV1(%ITRM(%ARTI),%ICAP(%ITRM(%ARTI)))',
