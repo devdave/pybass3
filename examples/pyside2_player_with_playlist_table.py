@@ -293,7 +293,7 @@ class PlayerController(QtCore.QObject):
             if song_file.exists() and song_file.is_file():
                 song_id, song = self.playlist.add_song(song_file)
                 self.do_state_update()
-                self.playlist.play_song(song_id)
+                self.playlist.play_song_by_id(song_id)
 
     def do_add_directory(self):
 

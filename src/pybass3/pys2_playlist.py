@@ -78,25 +78,33 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         if new_song is True and self.current is not None:
             self.song_changed.emit(self.current.id)
 
-    def play_song(self, song_id):
-        log.debug("Pys2Playlist.play_song %s", song_id)
-
-        if self.fadein_song is not None:
-            del self.fadein_song
-
-        if self.current is not None:
-            del self.current
-
-        self.current = self.songs[song_id]
-        self.current.play()
-        self.ticker.start()
-
-        self.song_changed.emit(song_id)
-        self.music_playing.emit(song_id)
+    # def play_song(self, song_id):
+    #     log.debug("Pys2Playlist.play_song %s", song_id)
+    #
+    #     if self.fadein_song is not None:
+    #         del self.fadein_song
+    #
+    #     if self.current is not None:
+    #         del self.current
+    #
+    #     self.current = self.songs[song_id]
+    #     self.current.play()
+    #     self.ticker.start()
+    #
+    #     self.song_changed.emit(song_id)
+    #     self.music_playing.emit(song_id)
 
     def play_song_by_index(self, song_index) -> Pys2Song:
 
         song = super(Pys2Playlist, self).play_song_by_index(song_index)
+
+        self.song_changed.emit(song.id)
+        self.music_playing.emit(song.id)
+
+        return song
+
+    def play_song_by_id(self, song_id) -> Song:
+        song = super(Pys2Playlist, self).play_song_by_id(song_id)
 
         self.song_changed.emit(song.id)
         self.music_playing.emit(song.id)
