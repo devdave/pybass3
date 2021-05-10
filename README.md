@@ -6,7 +6,7 @@
 LICENSING
 ---------
 
-The PyBass PYTHON wrapper is licensed under the MIT license BUT the BASS Library is dual licensed as free to use
+The PyBass PYTHON wrapper is licensed under the MIT license.  Meanwhile the BASS C Library is dual licensed as free to use
 for non-commercial development but requires a license for paid/commercial work.   Please see http://un4seen.com
 
 BASS library documentation
