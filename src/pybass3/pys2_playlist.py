@@ -87,7 +87,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         return song
 
-    def play_song_by_id(self, song_id) -> Song:
+    def play_song_by_id(self, song_id) -> Pys2Song:
         song = super(Pys2Playlist, self).play_song_by_id(song_id)
 
         self.song_changed.emit(song.id)
