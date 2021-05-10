@@ -29,3 +29,12 @@ supporting logic goes into wiring this up.
   
 * current_song property/variable is dead & gone, the correct property is now `current` which handles memory/handle cleanup
 and keeps things kosher.
+  
+0.1.0
+-----
+
+* Add support for BASS_GetTags along with a default
+helper to fetch (artist, album, year, track, and genre)
+  
+* Various code cleanup
+
