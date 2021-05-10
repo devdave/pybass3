@@ -68,6 +68,8 @@ BASS_Start = func_type(ctypes.c_bool)(("BASS_Start", bass_module))
 BASS_Stop = func_type(ctypes.c_bool)(("BASS_Stop", bass_module))
 
 
+DEBUG_BASS = False
+
 
 @dataclasses.dataclass
 class BassError:
