@@ -21,6 +21,7 @@ class Song:
     _handle_position: float # Seconds
     file_path: Path
     tags: dict
+    _tags_fetched = False
 
     def __init__(self, file_path: T.Union[str, Path]):
         super(Song, self).__init__()
@@ -55,8 +56,9 @@ class Song:
     def _create_stream(self):
         self._handle = BassStream.CreateFile(False, bytes(self.file_path))
         self._handle_length = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
-        if len(self.tags) == 0:
+        if self._tags_fetched is False:
             self.tags = BassTags.GetDefaultTags(self._handle)
+            self._tags_fetched = True
 
     def free_stream(self, direct_stop=False) -> None:
         """
