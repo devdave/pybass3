@@ -55,7 +55,8 @@ class Song:
     def _create_stream(self):
         self._handle = BassStream.CreateFile(False, bytes(self.file_path))
         self._handle_length = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
-        self.tags = BassTags.GetDefaultTags(self._handle)
+        if len(self.tags) == 0:
+            self.tags = BassTags.GetDefaultTags(self._handle)
 
     def free_stream(self, direct_stop=False) -> None:
         """
