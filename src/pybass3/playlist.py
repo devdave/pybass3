@@ -114,12 +114,20 @@ class Playlist:
 
         return None
 
-    def add_directory(self, dir_path: Path, recurse=True):
+    def add_directory(self, dir_path: Path, recurse=True, Top = False):
+        """
+
+        :param dir_path: The directory to scan for music
+        :param recurse: Should sub directories be walked over
+        :param Top: Is this the top level method in the recursion
+        :return: A list of song_ids
+        """
         log.debug("Playlist.add_directory called with %s", dir_path)
 
         files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix in self.VALID_TYPES)
         dirs = (fdir for fdir in dir_path.iterdir() if fdir.is_dir())
 
+        index_position = -1 if top is False else len(self)
         song_ids = []
 
         for song_path in files:
@@ -133,10 +141,10 @@ class Playlist:
 
         if recurse is True:
             for fdir in dirs:
-                sub_song_ids = self.add_directory(fdir, recurse)
+                _, sub_song_ids = self.add_directory(fdir, recurse)
                 song_ids.extend(sub_song_ids)
 
-        return song_ids
+        return index_position, song_ids
 
     @property
     def fade_in(self):
