@@ -23,7 +23,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
     """
     song_added = QtCore.Signal(str)  # Song ID, Qt DOES NOT like when I try to pass the Song object
-    songs_added = QtCore.Signal(list) # list of Song ID's
+    songs_added = QtCore.Signal(tuple) # the starting index and a list of Song ID's
     song_changed = QtCore.Signal(str)  # Song ID
     music_paused = QtCore.Signal(str)
     music_playing = QtCore.Signal(str)
@@ -42,13 +42,46 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Initialized playlist: Precision is %s", tick_precision)
 
 
-    def add_song(self, song_path, supress_emit = False) -> Pys2Song:
+    def add_song(self, song_path: pathlib.Path, supress_emit = False) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
         song = super(Pys2Playlist, self).add_song(song_path)
-        if song is not None and supress_emit is not False:
-            self.song_added.emit(song.id)
 
         return song
+
+    def add_directory(self, dir_path: pathlib.Path, recurse=True, top = False):
+        """
+
+        :param dir_path: The directory to scan for music
+        :param recurse: Should sub directories be walked over
+        :param Top: Is this the top level method in the recursion
+        :return: A list of song_ids
+        """
+        log.debug("Playlist.add_directory called with %s", dir_path)
+
+        files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix in self.VALID_TYPES)
+        dirs = (fdir for fdir in dir_path.iterdir() if fdir.is_dir())
+
+        index_position = -1 if top is False else len(self)
+        song_ids = []
+
+        for song_path in files:
+            try:
+                song = self.add_song(song_path, supress_emit= True)
+                if song is not None:
+                    song_ids.append(song.id)
+            except TypeError:
+                pass
+
+
+        if recurse is True:
+            for fdir in dirs:
+                _, sub_song_ids = self.add_directory(fdir, recurse)
+                song_ids.extend(sub_song_ids)
+
+        if top is True:
+            self.songs_added.emit((index_position, song_ids))
+
+        return index_position, song_ids
 
     def get_indexof_song_by_id(self, song_id):
         """
