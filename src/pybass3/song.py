@@ -17,8 +17,10 @@ log = logging.getLogger(__name__)
 class Song:
 
     _handle: HANDLE
-    _handle_length: float # Seconds
-    _handle_position: float # Seconds
+    _length_seconds: float # Seconds
+    _length_bytes: float
+
+    _position_seconds: float # Seconds
     file_path: Path
     tags: dict
     _tags_fetched = False
@@ -37,8 +39,8 @@ class Song:
 
 
         self._handle = None
-        self._handle_length = None # Length in seconds
-        self._handle_position = 0 # Current position in the song, in seconds
+        self._length_seconds = None # Length in seconds
+        self._position_seconds = 0 # Current position in the song, in seconds
         self.tags = defaultdict(lambda : None)
 
     def __del__(self):
@@ -55,7 +57,7 @@ class Song:
 
     def _create_stream(self):
         self._handle = BassStream.CreateFile(False, bytes(self.file_path))
-        self._handle_length = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
+        self._length_seconds = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
         if self._tags_fetched is False:
             self.tags = BassTags.GetDefaultTags(self._handle)
             self._tags_fetched = True
@@ -108,7 +110,7 @@ class Song:
         if self._handle is None:
             self._create_stream()
 
-        return self._handle_length
+        return self._length_seconds
 
     @property
     def duration_bytes(self) -> int:
