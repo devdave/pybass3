@@ -127,7 +127,7 @@ class Playlist:
 
         return None
 
-    def add_directory(self, dir_path: Path, recurse=True, Top = False):
+    def add_directory(self, dir_path: Path, recurse=True, top = False):
         """
 
         :param dir_path: The directory to scan for music
