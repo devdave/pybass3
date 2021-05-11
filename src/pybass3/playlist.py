@@ -92,6 +92,19 @@ class Playlist:
     def get_song_by_id(self, song_id) -> Song:
         return self.songs.get(song_id, None)
 
+    def get_indexof_song_by_id(self, song_id):
+        """
+            Find out where in the songs list a specific song is located.   Only works reliably with
+            Python >= 3.7 where dict is naturally ordered.
+
+            Drastically slower but works for now.
+
+        :param song_id:
+        :return:
+        """
+        songs = list(self.songs.keys())
+        return songs.index(song_id)
+
     def add_song(self, song_path: pathlib.Path, add2queue=True):
         log.debug("Playlist.add_song called with %s", song_path)
         song = self.song_cls(song_path)

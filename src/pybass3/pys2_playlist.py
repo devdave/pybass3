@@ -85,18 +85,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         return index_position, song_ids
 
-    def get_indexof_song_by_id(self, song_id):
-        """
-            Find out where in the songs list a specific song is located.   Only works reliably with
-            Python >= 3.7 where dict is naturally ordered.
 
-            Drastically slower but works for now.
-
-        :param song_id:
-        :return:
-        """
-        songs = list(self.songs.keys())
-        return songs.index(song_id)
 
     def play(self):
         log.debug("Pys2Playlist.play self.current is %s", self.current)
