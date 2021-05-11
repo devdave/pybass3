@@ -217,11 +217,11 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
 
     def set_sequential(self, restart_and_play = True):
-        super(Pys2Playlist, self).do_sequential(restart_and_play=restart_and_play)
+        super(Pys2Playlist, self).set_sequential(restart_and_play=restart_and_play)
         self.queue_changed.emit()
 
     def set_randomize(self, restart_and_play=True):
-        super(Pys2Playlist, self).do_randomize(restart_and_play=restart_and_play)
+        super(Pys2Playlist, self).set_randomize(restart_and_play=restart_and_play)
         self.queue_changed.emit()
 
 
