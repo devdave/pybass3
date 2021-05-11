@@ -40,6 +40,7 @@ class Song:
 
         self._handle = None
         self._length_seconds = None # Length in seconds
+        self._length_bytes = None
         self._position_seconds = 0 # Current position in the song, in seconds
         self.tags = defaultdict(lambda : None)
 
@@ -57,7 +58,10 @@ class Song:
 
     def _create_stream(self):
         self._handle = BassStream.CreateFile(False, bytes(self.file_path))
-        self._length_seconds = BassChannel.GetLengthSeconds(self._handle, BassChannel.GetLengthBytes(self.handle))
+        if self._length_bytes is None:
+            self._length_bytes = BassChannel.GetLengthBytes(self._handle)
+            self._length_seconds = BassChannel.GetLengthSeconds(self._handle, self._length_bytes)
+
         if self._tags_fetched is False:
             self.tags = BassTags.GetDefaultTags(self._handle)
             self._tags_fetched = True
@@ -107,14 +111,20 @@ class Song:
 
     @property
     def duration(self) -> float:
-        if self._handle is None:
-            self._create_stream()
+        if self._length_seconds is None:
+            if self._handle is None:
+                self._create_stream()
+                self.free_stream()
 
         return self._length_seconds
 
     @property
     def duration_bytes(self) -> int:
-        return BassChannel.GetLengthBytes(self.handle)
+        if self._length_bytes is None:
+            if self._handle is None:
+                self._create_stream()
+                self.free_stream()
+        return self._length_bytes
 
     @property
     def duration_time(self):
