@@ -87,7 +87,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
     def get_indexof_song_by_id(self, song_id):
         """
-            Find out where in the songs list a specific song is lcoated.   Only works reliably with
+            Find out where in the songs list a specific song is located.   Only works reliably with
             Python >= 3.7 where dict is naturally ordered.
 
             Drastically slower but works for now.
