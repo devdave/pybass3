@@ -29,6 +29,8 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     music_playing = QtCore.Signal(str)
     music_stopped = QtCore.Signal(str)
 
+    queue_changed = QtCore.Signal()
+
     ticked = QtCore.Signal()
 
     def __init__(self, tick_precision = 500):
@@ -214,6 +216,13 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         self.ticked.emit()
 
 
+    def set_sequential(self, restart_and_play = True):
+        super(Pys2Playlist, self).do_sequential(restart_and_play=restart_and_play)
+        self.queue_changed.emit()
+
+    def set_randomize(self, restart_and_play=True):
+        super(Pys2Playlist, self).do_randomize(restart_and_play=restart_and_play)
+        self.queue_changed.emit()
 
 
 
