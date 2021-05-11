@@ -347,7 +347,7 @@ class Playlist:
         if self.fadein_song is not None:
             self.fadein_song.pause()
 
-        if self.current is not None:
+        if self.current is not None and (self.current.is_playing or self.current.is_paused):
             return self.current.pause()
 
         return None
