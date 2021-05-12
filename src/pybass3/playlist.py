@@ -82,6 +82,7 @@ class Playlist:
 
 
     def get_song_by_row(self, row_position:int) -> Song:
+        log.debug("get_song_by_row %s", row_position)
         try:
             key = list(self.songs.keys())[row_position]
         except IndexError:
@@ -90,6 +91,7 @@ class Playlist:
         return self.songs[key]
 
     def get_song_by_id(self, song_id) -> Song:
+        log.debug("get_song_by_id %s", song_id)
         return self.songs.get(song_id, None)
 
     def get_indexof_song_by_id(self, song_id):
@@ -357,6 +359,7 @@ class Playlist:
 
 
     def restart(self):
+        log.debug("Restarting current song")
         if self.fadein_song is not None:
             del self.fadein_song
 
@@ -366,6 +369,7 @@ class Playlist:
 
 
     def next(self) -> Song:
+        log.debug("Advancing to next song")
         try:
             return self._next()
         except BassException:
