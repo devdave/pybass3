@@ -82,7 +82,6 @@ class Playlist:
 
 
     def get_song_by_row(self, row_position:int) -> Song:
-        log.debug("get_song_by_row %s", row_position)
         try:
             key = list(self.songs.keys())[row_position]
         except IndexError:
