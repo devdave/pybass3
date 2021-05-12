@@ -47,10 +47,12 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     def add_song(self, song_path: pathlib.Path, supress_emit = False) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
         song = super(Pys2Playlist, self).add_song(song_path)
+        if supress_emit is False and song is not None:
+            self.song_added.emit(song.id)
 
         return song
 
-    def add_directory(self, dir_path: pathlib.Path, recurse=True, top = False):
+    def add_directory(self, dir_path: pathlib.Path, recurse=True, top = False, surpress_emit = True):
         """
 
         :param dir_path: The directory to scan for music
@@ -69,7 +71,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         for song_path in files:
             try:
-                song = self.add_song(song_path, supress_emit= True)
+                song = self.add_song(song_path, supress_emit= surpress_emit)
                 if song is not None:
                     song_ids.append(song.id)
             except TypeError:
@@ -81,7 +83,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
                 _, sub_song_ids = self.add_directory(fdir, recurse)
                 song_ids.extend(sub_song_ids)
 
-        if top is True:
+        if top is True and surpress_emit is True:
             self.songs_added.emit((index_position, song_ids))
 
         return index_position, song_ids
