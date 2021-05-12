@@ -61,12 +61,11 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         :return: A list of song_ids
         """
         log.debug("Playlist.add_directory called with %s", dir_path)
-
         dir_path = pathlib.Path(dir_path) # Make sure I am dealing with pathlib
         files = (file for file in dir_path.iterdir() if file.is_file() and file.suffix in self.VALID_TYPES)
         dirs = (fdir for fdir in dir_path.iterdir() if fdir.is_dir())
 
-        index_position = -1 if top is False else len(self)
+        index_position = -1 if top is False else len(self)+1
         song_ids = []
 
         for song_path in files:
