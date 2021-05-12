@@ -102,8 +102,11 @@ class Playlist:
         :param song_id:
         :return:
         """
-        songs = list(self.songs.keys())
-        return songs.index(song_id)
+        try:
+            songs = list(self.songs.keys())
+            return songs.index(song_id)
+        except IndexError:
+            return None
 
     def add_song(self, song_path: pathlib.Path, add2queue=True):
         log.debug("Playlist.add_song called with %s", song_path)
