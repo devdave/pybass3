@@ -21,10 +21,13 @@ BASS_StreamGetFilePosition = func_type(
     HSTREAM,
     ctypes.c_ulong)(('BASS_StreamGetFilePosition', bass_module))
 
-DEBUG_BASS_STREAM = False
-OPEN_HANDLE_COUNT = 0
+
+
 
 class BassStream:
+
+    DEBUG_BASS_STREAM = False
+    DEBUG_OPEN_HANDLES = []
 
     @classmethod
     def CreateFile(cls, mem, file, offset=0, length=0, flags=0):
@@ -40,15 +43,13 @@ class BassStream:
         Returns:
 
         """
-        global DEBUG_BASS_STREAM, OPEN_HANDLE_COUNT
-
         handle = BASS_StreamCreateFile(mem, file, offset, length, flags)
 
         if handle == 0:
             Bass.RaiseError(f"file={file!r}")
 
-        if DEBUG_BASS_STREAM is True:
-            OPEN_HANDLE_COUNT += 1
+        if cls.DEBUG_BASS_STREAM is True:
+            cls.DEBUG_OPEN_HANDLES.append(handle)
 
         return handle
 
@@ -61,7 +62,7 @@ class BassStream:
         :param handle: The BASS stream handle to free
         :return:
         """
-        global DEBUG_BASS_STREAM, OPEN_HANDLE_COUNT
+        global DEBUG_BASS_STREAM, DEBUG_OPEN_HANDLES
         retval = BASS_StreamFree(handle)
-        if DEBUG_BASS_STREAM is True:
-            OPEN_HANDLE_COUNT -= 1
+        if cls.DEBUG_BASS_STREAM is True:
+            cls.DEBUG_OPEN_HANDLES.remove(handle)
