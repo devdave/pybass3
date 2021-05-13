@@ -116,9 +116,9 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     def play_song_by_id(self, song_id) -> Pys2Song:
         log.debug("Playing by id %s", song_id)
         song = super(Pys2Playlist, self).play_song_by_id(song_id)
-
-        self.song_changed.emit(song.id)
-        self.music_playing.emit(song.id)
+        if song is not None:
+            self.song_changed.emit(song.id)
+            self.music_playing.emit(song.id)
 
         return song
 
