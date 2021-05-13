@@ -105,6 +105,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
             self.song_changed.emit(self.current.id)
 
     def play_song_by_index(self, song_index) -> Pys2Song:
+        log.debug("Playing by index %s", song_index)
         song = super(Pys2Playlist, self).play_song_by_index(song_index)
 
         self.song_changed.emit(song.id)
@@ -113,6 +114,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         return song
 
     def play_song_by_id(self, song_id) -> Pys2Song:
+        log.debug("Playing by id %s", song_id)
         song = super(Pys2Playlist, self).play_song_by_id(song_id)
 
         self.song_changed.emit(song.id)
@@ -122,6 +124,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
 
     def play_first(self) -> Pys2Song:
+        log.debug("Playing first")
         song = super(Pys2Playlist, self).play_first()
         if song is not None:
             self.song_changed.emit(song.id)
@@ -202,6 +205,8 @@ class Pys2Playlist(QtCore.QObject, Playlist):
                 self.queue_position += 1
                 self.current.play()
                 self.song_changed.emit(self.current.id)
+            else:
+                log.debug("TICK - playlist has reached the end of the queue and is not looping")
 
         self.ticked.emit()
 
