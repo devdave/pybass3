@@ -25,10 +25,8 @@ class Song:
     tags: dict
     _tags_fetched = False
 
-    def __init__(self, file_path: T.Union[str, Path]):
-        super(Song, self).__init__()
-        Bass.Init()
-
+    def __init__(self, file_path: T.Union[str, Path], length_seconds = None, length_bytes = None, tags = None):
+        Bass.Init() # TODO is it appropriate to kick off BASS library initialization here?
         self._id = uuid4().hex
         self.file_path = Path(file_path)
         if self.file_path.exists() is False:
@@ -37,12 +35,15 @@ class Song:
         if self.file_path.is_file() is False:
             raise ValueError(f"{file_path=} is not a valid file")
 
+        if tags is None:
+            tags = {}
+
 
         self._handle = None
-        self._length_seconds = None # Length in seconds
-        self._length_bytes = None
+        self._length_seconds = length_seconds # Length in seconds
+        self._length_bytes = length_bytes
         self._position_seconds = 0 # Current position in the song, in seconds
-        self.tags = defaultdict(lambda : None)
+        self.tags = defaultdict(lambda : None, **tags)
 
     def __del__(self):
         """
