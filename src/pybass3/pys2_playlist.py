@@ -202,7 +202,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
                 self.fadein_song = self.upcoming
                 self.fadein_song.play()
 
-        elif remaining <= 0 and self.current is not None:
+        elif remaining <= 0:
             log.debug("TICK - current is finished, moving to next song")
             self.current.stop()
             self.current.free_stream()
@@ -213,6 +213,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
                 self.song_changed.emit(self.current.id)
             else:
                 log.debug("TICK - playlist has reached the end of the queue and is not looping")
+
 
         self.ticked.emit()
 
