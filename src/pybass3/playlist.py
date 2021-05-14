@@ -53,8 +53,8 @@ class Playlist:
 
 
 
-    def __init__(self, song_cls = Song):
-        self.songs = {}
+    def __init__(self, song_cls = Song, songs=None):
+        self.songs = songs or {}
         self.queue = []
         self.state = PlaylistState.stopped
         self.mode = PlaylistMode.sequential

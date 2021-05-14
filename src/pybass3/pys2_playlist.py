@@ -25,6 +25,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     song_added = QtCore.Signal(str)  # Song ID, Qt DOES NOT like when I try to pass the Song object
     songs_added = QtCore.Signal(tuple) # the starting index and a list of Song ID's
     song_changed = QtCore.Signal(str)  # Song ID
+    song_updated = QtCore.Signal(int) # Song by index/row #
     playlist_cleared = QtCore.Signal()
 
     music_paused = QtCore.Signal(str)
@@ -35,9 +36,9 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
     ticked = QtCore.Signal()
 
-    def __init__(self, tick_precision = 500):
+    def __init__(self, tick_precision = 500, songs = None):
         QtCore.QObject.__init__(self)
-        Playlist.__init__(self, Pys2Song)
+        Playlist.__init__(self, Pys2Song, songs=songs)
         self.ticker = QtCore.QTimer()
         self.ticker.setInterval(tick_precision)
 
