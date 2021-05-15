@@ -47,9 +47,9 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Initialized playlist: Precision is %s", tick_precision)
 
 
-    def add_song(self, song_path: pathlib.Path, supress_emit = False) -> Pys2Song:
+    def add_song_by_path(self, song_path: pathlib.Path, supress_emit = False) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
-        song = super(Pys2Playlist, self).add_song(song_path)
+        song = super(Pys2Playlist, self).add_song_by_path(song_path)
         if supress_emit is False and song is not None:
             self.song_added.emit(song.id)
 
@@ -73,7 +73,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         for song_path in files:
             try:
-                song = self.add_song(song_path, supress_emit= surpress_emit)
+                song = self.add_song_by_path(song_path, supress_emit= surpress_emit)
                 if song is not None:
                     song_ids.append(song.id)
             except TypeError:
