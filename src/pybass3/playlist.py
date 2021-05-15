@@ -110,7 +110,7 @@ class Playlist:
         except IndexError:
             return None
 
-    def add_song(self, song_obj: Song, add2queue=True) -> None:
+    def add_song(self, song_obj: Song, add2queue=True) -> Song:
         log.debug("Adding Song %r to playlist and will add to queue is %s", song_obj, add2queue)
 
         self.songs[song_obj.id] = song_obj
