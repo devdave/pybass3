@@ -291,7 +291,7 @@ class PlayerController(QtCore.QObject):
             song_file = pathlib.Path(song_file[0])
 
             if song_file.exists() and song_file.is_file():
-                song_id, song = self.playlist.add_song(song_file)
+                song_id, song = self.playlist.add_song_by_path(song_file)
                 self.do_state_update()
                 self.playlist.play_song_by_id(song_id)
 
