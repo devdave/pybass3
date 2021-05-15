@@ -38,3 +38,5 @@ helper to fetch (artist, album, year, track, and genre)
   
 * Various code cleanup
 
+* `add_song` has changed so that it takes a `Song` object and adds that to the playlist/queue while the original method
+has been renamed to `add_song_by_path`
