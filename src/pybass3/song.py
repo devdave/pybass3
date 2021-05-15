@@ -94,6 +94,11 @@ class Song:
 
         self._handle = None
 
+    def touch(self, do_not_release=False):
+        self._create_stream()
+        if do_not_release is False:
+            self.free_stream()
+
     @property
     def position(self) -> float:
         return BassChannel.GetPositionSeconds(self.handle)
