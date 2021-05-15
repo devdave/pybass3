@@ -117,6 +117,8 @@ class Playlist:
         if add2queue is True:
             self.queue.append(song_obj.id)
 
+        return song_obj
+
 
 
     def add_song_by_path(self, song_path: pathlib.Path, add2queue=True) -> typing.Union[None, Song]:
