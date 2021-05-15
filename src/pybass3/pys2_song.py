@@ -12,14 +12,14 @@ class Pys2Song(QtCore.QObject, Song):
 
     timer: QtCore.QTimer
 
-    def __init__(self, file_path, precision: int = 500):
+    def __init__(self, file_path, precision: int = 500, tags = None, length_seconds: float =None, length_bytes: int = None):
         """
 
         :param file_path: A valid file path to a music file
         :param precision: how often, in milliseconds, to pulse/emit song position in seconds
         """
         QtCore.QObject.__init__(self)
-        Song.__init__(self, file_path)
+        Song.__init__(self, file_path, tags=tags, length_seconds=length_seconds, length_bytes=length_bytes)
 
         self.timer = QtCore.QTimer(self)
         self.timer.setInterval(precision)
