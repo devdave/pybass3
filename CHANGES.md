@@ -40,3 +40,7 @@ helper to fetch (artist, album, year, track, and genre)
 
 * `add_song` has changed so that it takes a `Song` object and adds that to the playlist/queue while the original method
 has been renamed to `add_song_by_path`
+  
+* Refactored Signals to be consolidated into an adjacent "<ClassName>Signals" class to make it easier to see what signals
+a given class emits.
+  

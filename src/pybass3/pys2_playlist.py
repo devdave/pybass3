@@ -15,17 +15,11 @@ from .playlist import Playlist, PlaylistMode
 
 log = logging.getLogger(__name__)
 
-class Pys2Playlist(QtCore.QObject, Playlist):
-    """
-    Extension to the Playlist class which fires QT5/Pyside2 signals
-    for when songs are added (group or individual), when the song changes, as well as reports when
-    the state (play, pause, stop) occurs.
-
-    """
+class PlaylistSignals(QtCore.QObject, Playlist):
     song_added = QtCore.Signal(str)  # Song ID, Qt DOES NOT like when I try to pass the Song object
-    songs_added = QtCore.Signal(tuple) # the starting index and a list of Song ID's
+    songs_added = QtCore.Signal(tuple)  # the starting index and a list of Song ID's
     song_changed = QtCore.Signal(str)  # Song ID
-    song_updated = QtCore.Signal(int) # Song by index/row #
+    song_updated = QtCore.Signal(int)  # Song by index/row #
     playlist_cleared = QtCore.Signal()
 
     music_paused = QtCore.Signal(str)
@@ -33,12 +27,23 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     music_stopped = QtCore.Signal(str)
 
     queue_changed = QtCore.Signal()
-
     ticked = QtCore.Signal()
+
+class Pys2Playlist(QtCore.QObject, Playlist):
+    """
+    Extension to the Playlist class which fires QT5/Pyside2 signals
+    for when songs are added (group or individual), when the song changes, as well as reports when
+    the state (play, pause, stop) occurs.
+
+    """
+
+    signals: PlaylistSignals
 
     def __init__(self, tick_precision = 500, songs = None):
         QtCore.QObject.__init__(self)
         Playlist.__init__(self, Pys2Song, songs=songs)
+
+        self.signals = PlaylistSignals()
         self.ticker = QtCore.QTimer()
         self.ticker.setInterval(tick_precision)
 
@@ -49,7 +54,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     def add_song(self, song_obj: Pys2Song, add2queue=True, supress_emit = False) -> Pys2Song:
         song = super(Pys2Playlist, self).add_song(song_obj, add2queue=add2queue)
         if supress_emit is False and song is not None:
-            self.song_added.emit(song.id)
+            self.signals.song_added.emit(song.id)
 
         return song
 
@@ -58,7 +63,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Pys2Playlist.add_song %s", song_path)
         song = super(Pys2Playlist, self).add_song_by_path(song_path)
         if supress_emit is False and song is not None:
-            self.song_added.emit(song.id)
+            self.signals.song_added.emit(song.id)
 
         return song
 
@@ -93,7 +98,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
                 song_ids.extend(sub_song_ids)
 
         if top is True and surpress_emit is True:
-            self.songs_added.emit((index_position, song_ids))
+            self.signals.songs_added.emit((index_position, song_ids))
 
         return index_position, song_ids
 
@@ -108,18 +113,18 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         super(Pys2Playlist, self).play()
         if self.current is not None and self.current.is_playing:
-            self.music_playing.emit(self.current.id)
+            self.signals.music_playing.emit(self.current.id)
             self.ticker.start()
 
         if new_song is True and self.current is not None:
-            self.song_changed.emit(self.current.id)
+            self.signals.song_changed.emit(self.current.id)
 
     def play_song_by_index(self, song_index) -> Pys2Song:
         log.debug("Playing by index %s", song_index)
         song = super(Pys2Playlist, self).play_song_by_index(song_index)
 
-        self.song_changed.emit(song.id)
-        self.music_playing.emit(song.id)
+        self.signals.song_changed.emit(song.id)
+        self.signals.music_playing.emit(song.id)
 
         return song
 
@@ -127,8 +132,8 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Playing by id %s", song_id)
         song = super(Pys2Playlist, self).play_song_by_id(song_id)
         if song is not None:
-            self.song_changed.emit(song.id)
-            self.music_playing.emit(song.id)
+            self.signals.song_changed.emit(song.id)
+            self.signals.music_playing.emit(song.id)
 
         return song
 
@@ -137,8 +142,8 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Playing first")
         song = super(Pys2Playlist, self).play_first()
         if song is not None:
-            self.song_changed.emit(song.id)
-            self.music_playing.emit(song.id)
+            self.signals.song_changed.emit(song.id)
+            self.signals.music_playing.emit(song.id)
         return song
 
     def stop(self):
@@ -146,7 +151,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         super(Pys2Playlist, self).stop()
         if self.current is not None:
-            self.music_stopped.emit(self.current.id)
+            self.signals.music_stopped.emit(self.current.id)
             
         self.ticker.stop()
 
@@ -154,7 +159,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         log.debug("Pys2Playlist.pause called")
         super(Pys2Playlist, self).pause()
         if self.current is not None:
-            self.music_paused.emit(self.current.id)
+            self.signals.music_paused.emit(self.current.id)
 
         self.ticker.stop()
         
@@ -163,21 +168,21 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         result = super(Pys2Playlist, self).previous()
         log.debug("Pys2Playlist.previous changed to %r", result)
         if result is not None:
-            self.song_changed.emit(result.id)
+            self.signals.song_changed.emit(result.id)
         
     def next(self):
         log.debug("Pys2Playlist.next")
         result = super(Pys2Playlist, self).next()
         log.debug("Next song is %r", result)
         if result is not None:
-            self.song_changed.emit(result.id)
+            self.signals.song_changed.emit(result.id)
 
         return result
 
     def clear(self):
         self.ticker.stop()
         super(Pys2Playlist, self).clear()
-        self.playlist_cleared.emit()
+        self.signals.playlist_cleared.emit()
 
     def tick(self):
 
@@ -192,7 +197,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         if self.play_mode == PlaylistMode.loop_single and remaining <= 0:
             log.debug("TICK - Repeating %s", self.current.file_path)
             self.current.move2position_seconds(0)
-            self.song_changed.emit(self.current.id)
+            self.signals.song_changed.emit(self.current.id)
 
 
         elif self.fade_in > 0 and remaining_seconds <= self.fade_in:
@@ -203,7 +208,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
                 self.current = self.fadein_song
                 self.fadein_song = None
                 self.queue_position += 1
-                self.song_changed.emit(self.current.id)
+                self.signals.song_changed.emit(self.current.id)
 
             elif self.fadein_song is None and self.upcoming is not None:
                 log.debug("TICK - fading in song")
@@ -218,21 +223,21 @@ class Pys2Playlist(QtCore.QObject, Playlist):
             if self.current is not None:
                 self.queue_position += 1
                 self.current.play()
-                self.song_changed.emit(self.current.id)
+                self.signals.song_changed.emit(self.current.id)
             else:
                 log.debug("TICK - playlist has reached the end of the queue and is not looping")
 
 
-        self.ticked.emit()
+        self.signals.ticked.emit()
 
 
     def set_sequential(self, restart_and_play = True):
         super(Pys2Playlist, self).set_sequential(restart_and_play=restart_and_play)
-        self.queue_changed.emit()
+        self.signals.queue_changed.emit()
 
     def set_randomize(self, restart_and_play=True):
         super(Pys2Playlist, self).set_randomize(restart_and_play=restart_and_play)
-        self.queue_changed.emit()
+        self.signals.queue_changed.emit()
 
 
 

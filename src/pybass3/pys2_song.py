@@ -5,12 +5,15 @@ from .bass_module import Bass
 from .bass_channel import BassChannel
 
 
-
-class Pys2Song(QtCore.QObject, Song):
-    position_updated = QtCore.Signal(int) # length in bytes
+class SongSignals(QtCore.QObject):
+    position_updated = QtCore.Signal(int)  # length in bytes
     song_finished = QtCore.Signal()
 
+class Pys2Song(QtCore.QObject, Song):
+
+    signals: SongSignals
     timer: QtCore.QTimer
+
 
     def __init__(self, file_path, precision: int = 500, tags = None, length_seconds: float =None, length_bytes: int = None):
         """
@@ -21,6 +24,7 @@ class Pys2Song(QtCore.QObject, Song):
         QtCore.QObject.__init__(self)
         Song.__init__(self, file_path, tags=tags, length_seconds=length_seconds, length_bytes=length_bytes)
 
+        self.signals = SongSignals()
         self.timer = QtCore.QTimer(self)
         self.timer.setInterval(precision)
         self.timer.timeout.connect(self.pulser)
@@ -28,11 +32,11 @@ class Pys2Song(QtCore.QObject, Song):
     @QtCore.Slot(int)
     def pulser(self):
 
-        self.position_updated.emit(self.position)
+        self.signals.position_updated.emit(self.position)
 
-        if self.remaining_bytes == 0:
+        if self.remaining_bytes <= 0:
             self.stop()
-            self.song_finished.emit()
+            self.signals.song_finished.emit()
 
 
     def __del__(self) -> None:
