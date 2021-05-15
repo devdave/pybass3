@@ -8,6 +8,7 @@
 """
 import enum
 import pathlib
+import typing
 from pathlib import Path
 import random
 import logging
@@ -109,11 +110,20 @@ class Playlist:
         except IndexError:
             return None
 
-    def add_song(self, song_path: pathlib.Path, add2queue=True):
-        log.debug("Playlist.add_song called with %s", song_path)
+    def add_song(self, song_obj: Song, add2queue=True) -> None:
+        log.debug("Adding Song %r to playlist and will add to queue is %s", song_obj, add2queue)
+
+        self.songs[song_obj.id] = song_obj
+        if add2queue is True:
+            self.queue.append(song_obj.id)
+
+
+
+    def add_song_by_path(self, song_path: pathlib.Path, add2queue=True) -> typing.Union[None, Song]:
+        log.debug("Playlist.add_song_by_path called with %s", song_path)
         song = self.song_cls(song_path)
         try:
-            song.duration
+            song.touch()
         except BassException as bexc:
             if bexc.code == 41:
                 # bad formatted song
@@ -149,7 +159,7 @@ class Playlist:
 
         for song_path in files:
             try:
-                song = self.add_song(song_path)
+                song = self.add_song_by_path(song_path)
                 if song is not None:
                     song_ids.append(song.id)
             except TypeError:
