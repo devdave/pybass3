@@ -46,6 +46,13 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         log.debug("Initialized playlist: Precision is %s", tick_precision)
 
+    def add_song(self, song_obj: Pys2Song, add2queue=True, supress_emit = False) -> Pys2Song:
+        song = super(Pys2Playlist, self).add_song(song_obj, add2queue=add2queue)
+        if supress_emit is False and song is not None:
+            self.song_added.emit(song.id)
+
+        return song
+
 
     def add_song_by_path(self, song_path: pathlib.Path, supress_emit = False) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
