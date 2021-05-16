@@ -6,7 +6,7 @@ import logging
 from PySide2 import QtCore
 from PySide2 import QtWidgets
 
-from pybass3.pys2_playlist import Pys2Playlist
+from pybass3.pys2_playlist import Pys2Playlist as Playlist
 
 Qt = QtCore.Qt
 log = logging.getLogger(__name__)
@@ -107,7 +107,7 @@ class PlaylistTableModel(QtCore.QAbstractTableModel):
         super(PlaylistTableModel, self).__init__()
         self.playlist = playlist
 
-        self.playlist.song_added.connect(self.song_added)
+        self.playlist.signals.song_added.connect(self.song_added)
 
     def rowCount(self, parent: QtCore.QModelIndex = ...) -> int:
         return len(self.playlist)
@@ -156,7 +156,7 @@ class PlayerController(QtCore.QObject):
     def __init__(self):
         super(PlayerController, self).__init__()
         self.view = PlayerWindow()
-        self.playlist = Pys2Playlist()
+        self.playlist = Playlist()
         self.plt_model = PlaylistTableModel(self.playlist)
 
         self.playlist.fade_in = 5
@@ -187,8 +187,8 @@ class PlayerController(QtCore.QObject):
         self.view.sequential_btn.clicked.connect(self.on_sequential_click)
 
         # Playlist connections
-        self.playlist.ticked.connect(self.on_pl_tick)
-        self.playlist.song_changed.connect(self.on_song_changed)
+        self.playlist.signals.ticked.connect(self.on_pl_tick)
+        self.playlist.signals.song_changed.connect(self.on_song_changed)
 
         # I could hide a lot of view logic as a PlayerWindow set model method
         # but I am tired of how complicated this has gotten
