@@ -96,8 +96,8 @@ class Song:
 
     def touch(self, do_not_release=False):
         self._create_stream()
-        if do_not_release is False:
-            self.free_stream()
+        self.free_stream()
+
 
     @property
     def position(self) -> float:
