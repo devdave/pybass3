@@ -1,8 +1,11 @@
 import ctypes
+import logging
 
 from .bass_module import bass_module, Bass
 from .bass_module import func_type
 from .datatypes import QWORD, HSTREAM, HANDLE
+
+log = logging.getLogger(__name__)
 
 BASS_StreamCreateFile = func_type(
     HSTREAM,
@@ -43,8 +46,9 @@ class BassStream:
         Returns:
 
         """
-        handle = BASS_StreamCreateFile(mem, file, offset, length, flags)
 
+        handle = BASS_StreamCreateFile(mem, file, offset, length, flags)
+        log.debug("Opened handle to %s with %s", file, handle)
         if handle == 0:
             Bass.RaiseError(f"file={file!r}")
 
@@ -63,6 +67,10 @@ class BassStream:
         :return:
         """
         global DEBUG_BASS_STREAM, DEBUG_OPEN_HANDLES
+
+        log.debug("Freeing handle %s", handle)
         retval = BASS_StreamFree(handle)
         if cls.DEBUG_BASS_STREAM is True:
             cls.DEBUG_OPEN_HANDLES.remove(handle)
+
+        return retval
