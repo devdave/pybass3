@@ -1,8 +1,8 @@
 from PySide2 import QtCore
 
 from .song import Song
-from .bass_module import Bass
-from .bass_channel import BassChannel
+# from .bass_module import Bass
+# from .bass_channel import BassChannel
 
 
 class SongSignals(QtCore.QObject):
