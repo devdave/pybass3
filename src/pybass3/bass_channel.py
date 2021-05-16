@@ -1,3 +1,8 @@
+"""
+    Bass Channel manages/controls individual streams (play, pause, stop) plus reports state information like
+    position and duration.
+
+"""
 import ctypes
 
 from .bass_module import func_type, bass_module
@@ -40,7 +45,9 @@ BASS_ChannelSeconds2Bytes = func_type(
     ctypes.c_ulong,
     ctypes.c_double)(('BASS_ChannelSeconds2Bytes', bass_module))
 
-BASS_ChannelGetLength = func_type(QWORD, ctypes.c_ulong, ctypes.c_ulong)(('BASS_ChannelGetLength', bass_module))
+BASS_ChannelGetLength = func_type(QWORD,
+                                  ctypes.c_ulong,
+                                  ctypes.c_ulong)(('BASS_ChannelGetLength', bass_module))
 
 BASS_ChannelGetTagsID3v1 = func_type(
     ctypes.POINTER(ID3v1),
@@ -49,10 +56,14 @@ BASS_ChannelGetTagsID3v1 = func_type(
 
 
 class BassChannel:
+    """
+        Managed wrapper around the various BASS_Channel functions
 
+    """
     @classmethod
     def Play(cls, stream_handle: HANDLE, restart: bool = False) -> bool:
         """
+            Play the given stream or if directed `restart` at position 0
 
         Args:
             stream_handle: A valid Bass Stream handle
@@ -65,6 +76,12 @@ class BassChannel:
 
     @classmethod
     def Stop(cls, stream_handle: HANDLE) -> bool:
+        """
+            Stop's the given stream from playing to the output device.
+
+        :param stream_handle:
+        :return:
+        """
         return BASS_ChannelStop(stream_handle)
 
     @classmethod
@@ -113,13 +130,13 @@ class BassChannel:
 
     @classmethod
     def GetPositionSeconds(cls, stream_handle: HANDLE) -> int:
-        bytes = cls.GetPositionBytes(stream_handle)
-        return BASS_ChannelBytes2Seconds(stream_handle, bytes)
+        stream_bytes = cls.GetPositionBytes(stream_handle)
+        return BASS_ChannelBytes2Seconds(stream_handle, stream_bytes)
 
     @classmethod
     def SetPositionBySeconds(cls, handle: HANDLE, seconds: float):
-        bytes = BASS_ChannelSeconds2Bytes(handle, seconds)
-        return BASS_ChannelSetPosition(handle, bytes, channel.POS_BYTE)
+        stream_bytes = BASS_ChannelSeconds2Bytes(handle, seconds)
+        return BASS_ChannelSetPosition(handle, stream_bytes, channel.POS_BYTE)
 
     @classmethod
     def SetPositionByBytes(cls, handle: HANDLE, bytes: int):
@@ -127,11 +144,11 @@ class BassChannel:
 
 
     @classmethod
-    def GetLengthSeconds(cls, stream_handle, bytes = None):
-        if bytes is None:
-            bytes = cls.GetLengthBytes(stream_handle)
+    def GetLengthSeconds(cls, stream_handle, stream_bytes = None):
+        if stream_bytes is None:
+            stream_bytes = cls.GetLengthBytes(stream_handle)
 
-        return BASS_ChannelBytes2Seconds(stream_handle, bytes)
+        return BASS_ChannelBytes2Seconds(stream_handle, stream_bytes)
 
     @classmethod
     def GetLengthStr(cls, stream_handle):
