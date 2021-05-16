@@ -139,8 +139,8 @@ class PlayerController(QtCore.QObject):
         self.view.sequential_btn.clicked.connect(self.on_sequential_click)
 
         #Playlist connections
-        self.playlist.ticked.connect(self.on_pl_tick)
-        self.playlist.song_changed.connect(self.on_song_changed)
+        self.playlist.signals.ticked.connect(self.on_pl_tick)
+        self.playlist.signals.song_changed.connect(self.on_song_changed)
 
         log.debug("PlayerController connected to view")
 
@@ -232,9 +232,9 @@ class PlayerController(QtCore.QObject):
             song_file = pathlib.Path(song_file[0])
 
             if song_file.exists() and song_file.is_file():
-                song_id, song = self.playlist.add_song_by_path(song_file)
+                song = self.playlist.add_song_by_path(song_file)
                 self.do_state_update()
-                self.playlist.play_song_by_id(song_id)
+                self.playlist.play_song_by_id(song.id)
 
 
     def do_add_directory(self):
