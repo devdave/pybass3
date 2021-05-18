@@ -1,6 +1,7 @@
 from pathlib import Path
 import typing as T
 from uuid import uuid4
+from hashlib import sha1
 import logging
 from collections import defaultdict
 
@@ -27,8 +28,9 @@ class Song:
 
     def __init__(self, file_path: T.Union[str, Path], length_seconds = None, length_bytes = None, tags = None):
         Bass.Init() # TODO is it appropriate to kick off BASS library initialization here?
-        self._id = uuid4().hex
         self.file_path = Path(file_path)
+        # self._id = uuid4().hex
+        self._id = sha1(str(self.file_path.as_posix()).encode("utf-8")).hexdigest()
         if self.file_path.exists() is False:
             raise ValueError(f"{file_path} doesn't exist")
 
