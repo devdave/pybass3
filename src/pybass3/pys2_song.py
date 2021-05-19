@@ -1,18 +1,19 @@
 from PySide2 import QtCore
 
+from PySide2.QtCore import QObject, QTimer
+from PySide2.QtCore import Signal
+
 from .song import Song
-# from .bass_module import Bass
-# from .bass_channel import BassChannel
 
 
-class SongSignals(QtCore.QObject):
-    position_updated = QtCore.Signal(int)  # length in bytes
-    song_finished = QtCore.Signal()
+class SongSignals(QObject):
+    position_updated = Signal(int)  # length in bytes
+    song_finished = Signal()
 
-class Pys2Song(QtCore.QObject, Song):
+class Pys2Song(QObject, Song):
 
     signals: SongSignals
-    timer: QtCore.QTimer
+    timer: QTimer
 
 
     def __init__(self, file_path, precision: int = 500, tags = None, length_seconds: float =None, length_bytes: int = None):
@@ -21,11 +22,11 @@ class Pys2Song(QtCore.QObject, Song):
         :param file_path: A valid file path to a music file
         :param precision: how often, in milliseconds, to pulse/emit song position in seconds
         """
-        QtCore.QObject.__init__(self)
+        QObject.__init__(self)
         Song.__init__(self, file_path, tags=tags, length_seconds=length_seconds, length_bytes=length_bytes)
 
         self.signals = SongSignals()
-        self.timer = QtCore.QTimer(self)
+        self.timer = QTimer(self)
         self.timer.setInterval(precision)
         self.timer.timeout.connect(self.pulser)
 
