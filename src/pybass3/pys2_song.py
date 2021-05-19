@@ -1,8 +1,4 @@
-from PySide2 import QtCore
-
-from PySide2.QtCore import QObject, QTimer
-from PySide2.QtCore import Signal
-
+from .qtd import QObject, QTimer, Signal
 from .song import Song
 
 
