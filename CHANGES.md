@@ -45,4 +45,6 @@ has been renamed to `add_song_by_path`
 a given class emits.
   
 * Refactoring to get rid of camelCase convention in my code in favor of snake_case.
+
+* Refactoring Pys2_\* classes to be compatible with both PyQT5 and Pyside2 via the qtd.py module.
   
