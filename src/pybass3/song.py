@@ -53,14 +53,16 @@ class Song:
 
         :return:
         """
-        self.free_stream()
+        # self.free_stream()
+        pass
 
     @property
     def id(self):
         return self._id
 
     def _create_stream(self):
-        self._handle = BassStream.CreateFile(False, self.file_path.as_posix().encode("ansi"))
+        # TODO - linux/OSX support breaking
+        self._handle = BassStream.CreateFile(False, self.file_path.as_posix().encode("Windows-1252"))
         if self._length_bytes is None:
             self._length_bytes = BassChannel.GetLengthBytes(self._handle)
             self._length_seconds = BassChannel.GetLengthSeconds(self._handle, self._length_bytes)
