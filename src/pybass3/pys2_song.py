@@ -26,7 +26,7 @@ class Pys2Song(QObject, Song):
         self.timer.setInterval(precision)
         self.timer.timeout.connect(self.pulser)
 
-    @QtCore.Slot(int)
+    @QtCore.Slot()
     def pulser(self):
 
         self.signals.position_updated.emit(self.position)
