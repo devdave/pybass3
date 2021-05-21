@@ -1,4 +1,4 @@
-from .qtd import QObject, QTimer, Signal
+from .qtd import QObject, QtCore, Qt, QTimer, Signal
 from .song import Song
 
 
