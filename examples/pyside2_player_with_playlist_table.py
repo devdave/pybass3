@@ -311,7 +311,7 @@ class PlayerController(QtCore.QObject):
         log.debug("User selected %s", dir_path)
 
         if dir_path.exists():
-            self.playlist.add_directory(dir_path, recurse=True)
+            self.playlist.add_directory(dir_path, recurse=True, suppress_emit=False)
             if len(self.playlist) > 0:
                 self.playlist.play()
 
