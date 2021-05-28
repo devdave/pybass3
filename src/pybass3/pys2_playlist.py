@@ -95,7 +95,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         if recurse is True:
             for fdir in dirs:
-                _, sub_song_ids = self.add_directory(fdir, recurse)
+                _, sub_song_ids = self.add_directory(fdir, recurse, top=False, suppress_emit=suppress_emit)
                 song_ids.extend(sub_song_ids)
 
         if top is True and suppress_emit is True:
