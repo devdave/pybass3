@@ -146,8 +146,8 @@ class PlaylistTableModel(QtCore.QAbstractTableModel):
     def song_added(self, song_id: str):
 
         index = self.playlist.get_indexof_song_by_id(song_id)
-        index_model = QtCore.QModelIndex()
-        self.beginInsertRows(index_model, index, index)
+        log.debug("adding %s to %s", song_id, index)
+        self.beginInsertRows(QtCore.QModelIndex(), index, index)
         self.endInsertRows()
 
 
@@ -291,9 +291,10 @@ class PlayerController(QtCore.QObject):
             song_file = pathlib.Path(song_file[0])
 
             if song_file.exists() and song_file.is_file():
-                song_id, song = self.playlist.add_song_by_path(song_file)
-                self.do_state_update()
-                self.playlist.play_song_by_id(song_id)
+                song = self.playlist.add_song_by_path(song_file)
+                if song:
+                    self.do_state_update()
+                    self.playlist.play_song_by_id(song.id)
 
     def do_add_directory(self):
 
@@ -327,13 +328,13 @@ class PlayerController(QtCore.QObject):
             self.playlist.play()
 
     def on_sequential_click(self):
-        self.playlist.stop()
+        # self.playlist.stop()
 
-        self.playlist.set_sequential()
+        self.playlist.set_sequential(restart_and_play=False)
 
-        if len(self.playlist) > 0:
-            self.playlist.queue_position = 0
-            self.playlist.play()
+        # if len(self.playlist) > 0:
+        #     self.playlist.queue_position = 0
+        #     self.playlist.play()
 
     def on_songs_table_row_clicked(self):
         index = self.view.pl_table.selectedIndexes()[0]  # type: QtCore.QModelIndex
