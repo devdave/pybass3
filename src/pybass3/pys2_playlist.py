@@ -59,20 +59,21 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         return song
 
 
-    def add_song_by_path(self, song_path: pathlib.Path, supress_emit = False) -> Pys2Song:
+    def add_song_by_path(self, song_path: pathlib.Path, suppress_emit = False) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
         song = super(Pys2Playlist, self).add_song_by_path(song_path)
-        if supress_emit is False and song is not None:
+        if suppress_emit is False and song is not None:
             self.signals.song_added.emit(song.id)
 
         return song
 
-    def add_directory(self, dir_path: pathlib.Path, recurse=True, top = False, surpress_emit = True):
+    def add_directory(self, dir_path: pathlib.Path, recurse=True, top = False, suppress_emit = True):
         """
 
         :param dir_path: The directory to scan for music
         :param recurse: Should sub directories be walked over
         :param Top: Is this the top level method in the recursion
+        :param suppress_emit: If True, don't Signal each song discovery
         :return: A list of song_ids
         """
         log.debug("Playlist.add_directory called with %s", dir_path)
@@ -85,7 +86,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         for song_path in files:
             try:
-                song = self.add_song_by_path(song_path, supress_emit= surpress_emit)
+                song = self.add_song_by_path(song_path, supress_emit= suppress_emit)
                 if song is not None:
                     song_ids.append(song.id)
             except TypeError:
@@ -97,7 +98,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
                 _, sub_song_ids = self.add_directory(fdir, recurse)
                 song_ids.extend(sub_song_ids)
 
-        if top is True and surpress_emit is True:
+        if top is True and suppress_emit is True:
             self.signals.songs_added.emit((index_position, song_ids))
 
         return index_position, song_ids
