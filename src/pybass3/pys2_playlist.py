@@ -86,10 +86,11 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
         for song_path in files:
             try:
-                song = self.add_song_by_path(song_path, supress_emit= suppress_emit)
+                song = self.add_song_by_path(song_path, suppress_emit=suppress_emit)
                 if song is not None:
                     song_ids.append(song.id)
-            except TypeError:
+            except TypeError as exc:
+                debug = 1
                 pass
 
 
