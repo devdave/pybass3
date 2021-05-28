@@ -190,7 +190,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
             remaining = self.current.remaining_bytes
             remaining_seconds = self.current.remaining_seconds
         else:
-            log.debug("TICKER ACTIVE WITH NO SONG")
+            log.error("TICKER ACTIVE WITH NO SONG")
             self.ticker.stop()
             return
 
