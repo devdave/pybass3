@@ -209,6 +209,11 @@ class Playlist:
             if self.current is not None:
                 self.stop()
             self.play_first()
+        else:
+            if self.current is not None:
+                sid = self.current.id
+                self.queue_position = self.queue.index(sid)
+
 
 
     def loop_song(self):
