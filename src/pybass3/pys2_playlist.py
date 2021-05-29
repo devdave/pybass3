@@ -59,9 +59,9 @@ class Pys2Playlist(QtCore.QObject, Playlist):
         return song
 
 
-    def add_song_by_path(self, song_path: pathlib.Path, suppress_emit = False) -> Pys2Song:
+    def add_song_by_path(self, song_path: pathlib.Path, add2queue=True, suppress_emit = False) -> Pys2Song:
         log.debug("Pys2Playlist.add_song %s", song_path)
-        song = super(Pys2Playlist, self).add_song_by_path(song_path)
+        song = super(Pys2Playlist, self).add_song_by_path(song_path, add2queue=add2queue)
         if suppress_emit is False and song is not None:
             self.signals.song_added.emit(song.id)
 
