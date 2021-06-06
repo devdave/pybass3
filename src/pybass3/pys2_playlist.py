@@ -42,6 +42,7 @@ class Pys2Playlist(QtCore.QObject, Playlist):
     def __init__(self, tick_precision = 500, songs = None):
         QtCore.QObject.__init__(self)
         Playlist.__init__(self, Pys2Song, songs=songs)
+        log.debug("QT Playlist initialzied")
 
         self.signals = PlaylistSignals()
         self.ticker = QtCore.QTimer()
@@ -108,10 +109,8 @@ class Pys2Playlist(QtCore.QObject, Playlist):
 
     def play(self):
         log.debug("Pys2Playlist.play self.current is %s", self.current)
-        new_song = False
 
-        if self.current is None:
-            new_song = True
+        new_song = self.current is None
 
         super(Pys2Playlist, self).play()
         if self.current is not None and self.current.is_playing:
