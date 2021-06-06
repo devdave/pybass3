@@ -75,8 +75,9 @@ class Playlist:
     def free(self):
         del self.current
         del self.fadein_song
-        self.songs = []
+        self.songs = {}
         self.queue = []
+        self.queue_position = 0
 
     def clear(self):
         self.free()
@@ -143,7 +144,7 @@ class Playlist:
 
         return None
 
-    def add_directory(self, dir_path: Path, recurse=True, top = False):
+    def add_directory(self, dir_path: Path, recurse: bool=True, top: bool = False):
         """
 
         :param dir_path: The directory to scan for music
