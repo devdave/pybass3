@@ -14,6 +14,7 @@ BASSVERSIONTEXT = '2.4'
 
 HERE = Path(__file__).parent
 BASS_DLL = HERE / "vendor" / "bass"
+BASS_ATTRIB_VOL = 2 # used to set local volume
 
 # Carry over from pybass, TODO remove?
 if sys.hexversion < 0x02060000:
@@ -44,6 +45,7 @@ BASS_ErrorGetCode = func_type(ctypes.c_int)(('BASS_ErrorGetCode', bass_module))
 
 BASS_GetCPU = func_type(ctypes.c_float)(('BASS_GetCPU', bass_module))
 
+#Global volume
 BASS_SetVolume = func_type(ctypes.c_bool, ctypes.c_float)(('BASS_SetVolume', bass_module))
 BASS_GetVolume = func_type(ctypes.c_float)(('BASS_GetVolume', bass_module))
 
@@ -61,6 +63,9 @@ BASS_GetDevice = func_type(ctypes.c_ulong)(('BASS_GetDevice', bass_module))
 BASS_SetDevice = func_type(ctypes.c_bool, ctypes.c_ulong)(('BASS_SetDevice', bass_module))
 
 BASS_GetDeviceInfo = func_type(ctypes.c_bool, ctypes.c_ulong, ctypes.POINTER(BASS_DEVICEINFO))(('BASS_GetDeviceInfo', bass_module))
+
+#Channel set attribute
+BASS_ChannelSetAttribute = func_type(ctypes.c_bool, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_float)(('BASS_ChannelSetAttribute',bass_module))
 
 # Master play controls
 BASS_Pause =  func_type(ctypes.c_bool)(("BASS_Pause", bass_module))
@@ -213,6 +218,40 @@ class Bass:
         volume = perc / 100
         cls.SetVolumeLevel(volume)
 
+    @classmethod
+    def SetChannelVolume(cls, handle, level):
+        """
+
+        Args:
+            handle: Channel handle; ex. Playlist.current.handle, Song.handle
+            level: Valid input is between 0 and 1.0
+
+        Returns:
+
+        """
+        BASS_ChannelSetAttribute(handle,BASS_ATTRIB_VOL,level)
+
+    @classmethod
+    def VolumeToLogVolume(cls, level):
+        """
+        Converts the "slider" level to the logarithmic volume value.
+        Aims to conform to the way the human hearing works.
+        Research: https://www.dr-lex.be/info-stuff/volumecontrols.html
+        Values for level below 0.7 are quite hard to hear!
+
+        Args:
+            level: Valid input is between 0 and 1.0
+
+        Returns:
+            The new "anatomic" value that can be sent
+            to BASS.Set(Channel)Volume directly.
+
+        """
+
+        volume = level**4
+        if level < 0.10: # a smoother transition to zero
+            volume *= level*10
+        return volume
 
     @classmethod
     def SetConfig(cls, config_flag, value):
