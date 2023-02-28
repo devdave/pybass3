@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="PyBASS3",
     package_data={
-        "pybass3": ["vendor/*.dll", "vendor/*.h", "vendor/*.txt"],
+        "pybass3": ["vendor/*.dll", "vendor/*.h", "vendor/*.txt", "vendor/*.so"],
     },
     python_requires = ">= 3.6"
 
