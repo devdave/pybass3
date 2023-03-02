@@ -25,7 +25,7 @@ if platform.system().lower() == "windows":
     func_type = ctypes.WINFUNCTYPE
 else:
     bass_module = ctypes.CDLL(
-        './libbass.so',
+        HERE / "vendor" / "libbass.so",
         mode=ctypes.RTLD_GLOBAL)
     func_type = ctypes.CFUNCTYPE
 
